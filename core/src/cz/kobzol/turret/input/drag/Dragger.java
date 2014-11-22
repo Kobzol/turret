@@ -10,8 +10,20 @@ import cz.kobzol.turret.input.mouse.MouseState;
  */
 public class Dragger {
     public void handleDrag(IDraggable draggableObject, MouseState mouseState) {
-        if (draggableObject.getBoundingBox().contains(mouseState.getMousePosition())) {
+        DragContainer container = draggableObject.getDragContainer();
 
+        if (mouseState.isPressed()) {
+            if (container.getDragState().equals(DragContainer.DragState.BEING_DRAGGED)) {
+                container.moveObjectTo(mouseState.getMousePosition());
+            }
+            else if (draggableObject.getBoundingBox().contains(mouseState.getMousePosition())) {
+                container.startDrag();
+            }
+        }
+        else {
+            if (container.getDragState().equals(DragContainer.DragState.BEING_DRAGGED)) {
+                container.finalizeDrag();
+            }
         }
     }
 }

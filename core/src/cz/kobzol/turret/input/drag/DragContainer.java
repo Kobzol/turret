@@ -18,7 +18,7 @@ public class DragContainer {
 
     public DragContainer(IPositionable draggedObject) {
         this.draggedObject = draggedObject;
-        this.dragState = dragState;
+        this.dragState = DragState.WAITING;
 
         this.updateInitialPosition();
     }
@@ -38,10 +38,20 @@ public class DragContainer {
     public DragState getDragState() {
         return this.dragState;
     }
+
+    public void moveObjectTo(Vector2 position) {
+        this.getDraggedObject().setPosition(position);
+    }
+
     public void startDrag() {
         this.dragState = DragState.BEING_DRAGGED;
     }
-    public void stopDrag() {
+    public void revertDrag() {
         this.dragState = DragState.WAITING;
+        this.getDraggedObject().setPosition(this.getInitialPosition());
+    }
+    public void finalizeDrag() {
+        this.dragState = DragState.WAITING;
+        this.updateInitialPosition();
     }
 }
