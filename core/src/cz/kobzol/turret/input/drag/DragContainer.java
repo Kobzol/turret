@@ -9,6 +9,7 @@ import cz.kobzol.turret.graphics.IPositionable;
 public class DragContainer {
     public enum DragState {
         WAITING,
+        READY_TO_DRAG,
         BEING_DRAGGED
     }
 
@@ -43,6 +44,9 @@ public class DragContainer {
         this.getDraggedObject().setPosition(position);
     }
 
+    public void setReadyToDrag() {
+        this.dragState = DragState.READY_TO_DRAG;
+    }
     public void startDrag() {
         this.dragState = DragState.BEING_DRAGGED;
     }
@@ -53,5 +57,8 @@ public class DragContainer {
     public void finalizeDrag() {
         this.dragState = DragState.WAITING;
         this.updateInitialPosition();
+    }
+    public void resetToWait() {
+        this.dragState = DragState.WAITING;
     }
 }
