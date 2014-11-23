@@ -37,7 +37,7 @@ public class GameLoop extends ApplicationAdapter {
         this.assetManager = this.preloadAssets();
 
         this.game = new Game(this.assetManager);
-        this.game.prepare();
+        this.game.start();
 	}
 
     private AssetManager preloadAssets() {
@@ -56,51 +56,37 @@ public class GameLoop extends ApplicationAdapter {
 
         this.camera.update();
 
-        List<GameObject> objects = this.game.getObjects();
+        this.renderSprite();
+        this.renderShape();
 
-        this.renderSprite(objects);
-        this.renderShape(objects);
-
-        this.handleInput(objects);
+        this.handleInput();
 
         this.game.update();
 	}
 
-    private void renderSprite(List<GameObject> objects) {
+    private void renderSprite() {
         this.batch.setProjectionMatrix(this.camera.combined);
         this.batch.begin();
 
-        for (GameObject object : objects) {
-            if (object instanceof IDrawable) {
-                ((IDrawable) object).draw(this.batch);
-            }
-        }
+        this.game.draw(this.batch);
 
         this.batch.end();
     }
-    private void renderShape(List<GameObject> objects) {
+    private void renderShape() {
         this.shapeRenderer.setProjectionMatrix(this.camera.combined);
         this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-        for (GameObject object : objects) {
-            if (object instanceof IDrawable) {
-                ((IDrawable) object).drawShape(this.shapeRenderer);
-            }
-        }
+        this.game.drawShape(this.shapeRenderer);
 
         this.shapeRenderer.end();
     }
 
-    private void handleInput(List<GameObject> objects) {
+    private void handleInput() {
         Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         this.camera.unproject(mousePosition);
 
         MouseState mouseState = new MouseState(mousePosition.x, mousePosition.y, Gdx.input.isButtonPressed(Input.Buttons.LEFT));
 
-        for (GameObject object : objects) {
-            if (object instanceof IDraggable) {
-                this.dragger.handleDrag((IDraggable) object, mouseState);
-            }
-        }
+        this.game.handleDrag(mouseState);
     }
 }
