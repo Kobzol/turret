@@ -26,4 +26,7 @@ public class Level {
     public void addObject(GameObject object) {
         this.manager.registerObject(object);
     }
+    public List<GameObject> getObjects() {
+        return this.manager.getObjects();
+    }
 }

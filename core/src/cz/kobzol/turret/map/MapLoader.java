@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.DrawableShape;
 import cz.kobzol.turret.model.GameObject;
-import cz.kobzol.turret.model.SpriteObject;
+import cz.kobzol.turret.graphics.SpriteObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -85,7 +85,7 @@ public class MapLoader {
                     }
 
                     for (String iface : element.getAttribute("interfaces").split(",")) {
-                        if (iface.equals("model.SpriteObject")) {
+                        if (iface.equals("graphics.SpriteObject")) {
                             this.parseSpriteObject(object, element);
                         }
                     }
@@ -151,37 +151,6 @@ public class MapLoader {
 
         spriteObject.setSpeed(this.parseSpeed(elementObject));
         spriteObject.setRotation(this.parseRotation(elementObject));
-    }
-
-    /**
-     * Parses map from DOM element. Expects child nodes name, background, dimension.
-     * @param elementProperties DOM element
-     */
-    private Map parseMap(Element elementProperties) {
-        String name = "";
-        Texture background = null;
-        Dimension dimension = new Dimension(0, 0);
-
-        for (int i = 0; i < elementProperties.getChildNodes().getLength(); i++)
-        {
-            Node node = elementProperties.getChildNodes().item(i);
-
-            if (node instanceof Element) {
-                Element element = (Element) node;
-
-                if (element.getTagName().equals("name")) {
-                    name = element.getAttribute("value");
-                }
-                else if (element.getTagName().equals("background")) {
-                    background = this.loadAsset(element.getAttribute("value"), Texture.class);
-                }
-                else if (element.getTagName().equals("dimension")) {
-                    dimension = this.parseDimension(element);
-                }
-            }
-        }
-
-        return new Map(name, background, dimension);
     }
 
     /**
