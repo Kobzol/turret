@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level>
     <objects>
-        <object interfaces="graphics.SpriteObject" class="graphics.SpriteObject"  key="test1">
+        <object interfaces="graphics.SpriteObject" class="model.Demon"  key="test1">
             <position x="100" y="100" />
             <dimension width="100" height="100" />
-            <texture value="wall.jpg" />
+            <texture value="slot.png" />
             <rotation value="90" />
         </object>
     </objects>

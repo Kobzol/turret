@@ -1,9 +1,8 @@
 package cz.kobzol.turret.map;
 
 import cz.kobzol.turret.model.GameObject;
-import cz.kobzol.turret.model.ObjectManager;
+import cz.kobzol.turret.util.ObjectManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
