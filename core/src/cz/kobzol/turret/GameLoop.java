@@ -10,16 +10,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import cz.kobzol.turret.graphics.IDrawable;
 import cz.kobzol.turret.input.drag.Dragger;
-import cz.kobzol.turret.input.drag.IDraggable;
 import cz.kobzol.turret.input.mouse.MouseState;
-import cz.kobzol.turret.model.GameObject;
 import cz.kobzol.turret.util.AssetContainer;
 import cz.kobzol.turret.util.ObjectLoader;
 import cz.kobzol.turret.util.ObjectManager;
-
-import java.util.List;
 
 public class GameLoop extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -38,7 +33,7 @@ public class GameLoop extends ApplicationAdapter {
 		this.batch = new SpriteBatch();
 		this.shapeRenderer = new ShapeRenderer();
         this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 2000, 1000);
+        this.camera.setToOrtho(false, 1600, 800);
         this.assetManager = this.preloadAssets();
         this.objectManager = new ObjectLoader(this.assetManager).parseObjectManager(Gdx.files.internal("game_objects.xml"));
 

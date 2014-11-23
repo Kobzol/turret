@@ -3,7 +3,7 @@
     <objects>
         <object interfaces="graphics.SpriteObject" class="model.Slot"  key="slot">
             <position x="0" y="0" />
-            <dimension width="60" height="60" />
+            <dimension width="30" height="30" />
             <texture value="slot.png" />
             <rotation value="90" />
         </object>
