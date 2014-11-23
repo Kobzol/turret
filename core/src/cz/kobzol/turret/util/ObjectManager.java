@@ -6,23 +6,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ObjectManager<T extends GameObject>
+public class ObjectManager
 {
-    protected List<T> objects;
-    protected HashMap<Integer, T> objectsId;
-    protected HashMap<String, T> objectsKey;
+    protected List<GameObject> objects;
+    protected HashMap<Integer, GameObject> objectsId;
+    protected HashMap<String, GameObject> objectsKey;
 
     public ObjectManager() {
-        this.objects = new ArrayList<T>();
-        this.objectsId = new HashMap<Integer, T>();
-        this.objectsKey = new HashMap<String, T>();
+        this.objects = new ArrayList<GameObject>();
+        this.objectsId = new HashMap<Integer, GameObject>();
+        this.objectsKey = new HashMap<String, GameObject>();
     }
 
     /**
      * Return registered objects
      */
-    public ArrayList<T> getObjects() {
-        return (ArrayList<T>) this.objects;
+    public ArrayList<GameObject> getObjects() {
+        return (ArrayList<GameObject>) this.objects;
     }
 
 
@@ -31,7 +31,7 @@ public class ObjectManager<T extends GameObject>
      * @param id
      * @return return object by generic or {@code null}
      */
-    public T getObjectById(int id) {
+    public GameObject getObjectById(int id) {
         return objectsId.get(id);
     }
 
@@ -42,9 +42,9 @@ public class ObjectManager<T extends GameObject>
      * @param key
      * @return return object by generic or {@code null}
      */
-    public T getObjectByKey(String key) {
+    public GameObject getObjectByKey(String key) {
         if (objectsKey.containsKey(key)) {
-            T object = objectsKey.get(key);
+            GameObject object = objectsKey.get(key);
             if (object.getKey().equals(key)) {
                 return object;
             } else {
@@ -52,7 +52,7 @@ public class ObjectManager<T extends GameObject>
                 objectsKey.put(object.getKey(), object);
             }
         }
-        for (T object : objects) {
+        for (GameObject object : objects) {
             if (object.getKey().equals(key)) {
                 objectsKey.put(object.getKey(), object);
                 return object;
@@ -66,7 +66,7 @@ public class ObjectManager<T extends GameObject>
      * Register new object (first) and call event (second)
      * @param object
      */
-    public void registerObject(T object)
+    public void registerObject(GameObject object)
     {
         this.objects.add(object);
         this.objectsId.put(object.getId(), object);
@@ -78,7 +78,7 @@ public class ObjectManager<T extends GameObject>
      * Unregister object (second), and call event (first)
      * @param object
      */
-    public void removeObject(T object) {
+    public void removeObject(GameObject object) {
         this.objects.remove(object);
         this.objectsId.remove(object.getId());
         this.objectsKey.remove(object.getKey());
