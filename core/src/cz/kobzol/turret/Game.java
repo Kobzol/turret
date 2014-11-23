@@ -15,6 +15,7 @@ import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.map.Level;
 import cz.kobzol.turret.map.MapLoader;
 import cz.kobzol.turret.model.GameObject;
+import cz.kobzol.turret.model.PlayScreen;
 import cz.kobzol.turret.model.Screen;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class Game implements IDrawable, IUpdatable {
 
     public void start() {
         this.activeScreenId = 0;
+        this.screens.add(new PlayScreen(this.assetManager));
     }
 
     public Screen getActiveScreen() {

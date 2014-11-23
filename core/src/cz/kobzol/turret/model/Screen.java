@@ -1,5 +1,6 @@
 package cz.kobzol.turret.model;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import cz.kobzol.turret.graphics.IDrawable;
@@ -15,11 +16,12 @@ import java.util.List;
  * Represents a single game screen.
  */
 public abstract class Screen implements IDrawable, IUpdatable {
-    protected List<GameObject> objects;
-    protected Dragger dragger = new Dragger();
+    protected final AssetManager assetManager;
+    protected final List<GameObject> objects = new ArrayList<GameObject>();
+    protected final Dragger dragger = new Dragger();
 
-    public Screen() {
-        this.objects = new ArrayList<GameObject>();
+    public Screen(AssetManager assetManager) {
+        this.assetManager = assetManager;
     }
 
     @Override
