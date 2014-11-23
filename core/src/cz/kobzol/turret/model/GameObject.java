@@ -1,14 +1,15 @@
 package cz.kobzol.turret.model;
 
-import cz.kobzol.turret.graphics.IGameObject;
-
 /**
  * Represents game object with unique ID and key.
  */
-public abstract class GameObject implements IGameObject {
+public abstract class GameObject implements Cloneable {
     private static int id_counter = 0;
+    private static int generateID() {
+        return GameObject.id_counter++;
+    }
 
-    private final int id;
+    private int id;
     private String key;
 
     public GameObject() {
@@ -24,5 +25,19 @@ public abstract class GameObject implements IGameObject {
     }
     public final void setKey(String key) {
         this.key = key;
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            GameObject obj = (GameObject) super.clone();
+            obj.id = GameObject.generateID();
+
+            return obj;
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
