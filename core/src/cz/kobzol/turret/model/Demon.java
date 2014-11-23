@@ -1,5 +1,6 @@
 package cz.kobzol.turret.model;
 
+import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.drag.DragContainer;
 import cz.kobzol.turret.input.drag.IDraggable;
 
@@ -16,5 +17,13 @@ public class Demon extends SpriteObject implements IDraggable {
     @Override
     public DragContainer getDragContainer() {
         return this.container;
+    }
+
+    @Override
+    public Object clone() {
+        Demon obj = (Demon) super.clone();
+        obj.container = new DragContainer(obj);
+
+        return obj;
     }
 }

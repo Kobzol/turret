@@ -1,4 +1,4 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.graphics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,6 +11,7 @@ import cz.kobzol.turret.graphics.ICollidable;
 import cz.kobzol.turret.graphics.IMovable;
 import cz.kobzol.turret.graphics.IRotable;
 import cz.kobzol.turret.graphics.IUpdatable;
+import cz.kobzol.turret.model.GameObject;
 
 import java.awt.Dimension;
 
@@ -21,7 +22,6 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     protected Sprite sprite;
     protected Vector2 direction;
     protected float speed;
-    protected Dimension dimension;
 
     public SpriteObject() {
         this.sprite = new Sprite();
@@ -124,5 +124,17 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     @Override
     public void update() {
 
+    }
+
+    @Override
+    public Object clone() {
+        SpriteObject obj = (SpriteObject) super.clone();
+        obj.sprite = new Sprite();
+        obj.setTexture(new Texture(this.getTexture().getTextureData()));
+        obj.position = new Vector2(this.getPosition());
+        obj.direction = new Vector2(this.getDirection());
+        obj.dimension = (Dimension) this.getDimension().clone();
+
+        return obj;
     }
 }
