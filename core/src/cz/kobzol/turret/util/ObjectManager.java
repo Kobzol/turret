@@ -1,4 +1,6 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.util;
+
+import cz.kobzol.turret.model.GameObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ public class ObjectManager<T extends GameObject>
      * Return registered objects
      */
     public ArrayList<T> getObjects() {
-        return new ArrayList<T>(this.objects);
+        return (ArrayList<T>) this.objects;
     }
 
 
