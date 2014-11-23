@@ -8,6 +8,7 @@ import cz.kobzol.turret.graphics.IUpdatable;
 import cz.kobzol.turret.input.drag.Dragger;
 import cz.kobzol.turret.input.drag.IDraggable;
 import cz.kobzol.turret.input.mouse.MouseState;
+import cz.kobzol.turret.util.AssetContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,20 @@ import java.util.List;
  * Represents a single game screen.
  */
 public abstract class Screen implements IDrawable, IUpdatable {
-    protected final AssetManager assetManager;
+    protected final AssetContainer assetContainer;
     protected final List<GameObject> objects = new ArrayList<GameObject>();
     protected final Dragger dragger = new Dragger();
 
-    public Screen(AssetManager assetManager) {
-        this.assetManager = assetManager;
+    public Screen(AssetContainer assetContainer) {
+        this.assetContainer = assetContainer;
+    }
+
+    public void start() {
+
+    }
+
+    public AssetContainer getAssetContainer() {
+        return this.assetContainer;
     }
 
     @Override
