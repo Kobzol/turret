@@ -15,6 +15,9 @@ import cz.kobzol.turret.input.drag.Dragger;
 import cz.kobzol.turret.input.drag.IDraggable;
 import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.model.GameObject;
+import cz.kobzol.turret.util.AssetContainer;
+import cz.kobzol.turret.util.ObjectLoader;
+import cz.kobzol.turret.util.ObjectManager;
 
 import java.util.List;
 
@@ -22,7 +25,9 @@ public class GameLoop extends ApplicationAdapter {
 	SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     OrthographicCamera camera;
+
     AssetManager assetManager;
+    ObjectManager objectManager;
 
     Dragger dragger = new Dragger();
 
@@ -35,8 +40,9 @@ public class GameLoop extends ApplicationAdapter {
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 2000, 1000);
         this.assetManager = this.preloadAssets();
+        this.objectManager = new ObjectLoader(this.assetManager).parseObjectManager(Gdx.files.internal("game_objects.xml"));
 
-        this.game = new Game(this.assetManager);
+        this.game = new Game(new AssetContainer(this.assetManager, this.objectManager));
         this.game.start();
 	}
 
