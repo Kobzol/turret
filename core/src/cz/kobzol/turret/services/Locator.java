@@ -14,8 +14,8 @@ public class Locator {
 
     }
 
-    public static void provide(AssetContainer assetManager) {
-        Locator.assetContainer = assetManager;
+    public static void provide(AssetContainer assetContainer) {
+        Locator.assetContainer = assetContainer;
     }
     public static void provide(Game game) {
         Locator.game = game;

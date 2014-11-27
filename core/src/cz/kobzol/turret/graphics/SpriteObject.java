@@ -1,17 +1,12 @@
 package cz.kobzol.turret.graphics;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import cz.kobzol.turret.graphics.DrawableShape;
-import cz.kobzol.turret.graphics.ICollidable;
-import cz.kobzol.turret.graphics.IMovable;
-import cz.kobzol.turret.graphics.IRotable;
-import cz.kobzol.turret.graphics.IUpdatable;
-import cz.kobzol.turret.model.GameObject;
 
 import java.awt.Dimension;
 
@@ -59,7 +54,7 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     }
 
     @Override
-    public void draw(Batch batch) {
+    public void render(Batch batch, Camera camera) {
             batch.draw(
                     this.sprite, this.sprite.getX() - this.sprite.getOriginX(), this.sprite.getY()  - this.sprite.getOriginY(),
                     this.sprite.getOriginX(), this.sprite.getOriginY(),
