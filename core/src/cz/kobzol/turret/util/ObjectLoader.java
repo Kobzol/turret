@@ -5,8 +5,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.DrawableShape;
-import cz.kobzol.turret.model.GameObject;
 import cz.kobzol.turret.graphics.SpriteObject;
+import cz.kobzol.turret.model.GameObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -122,13 +122,9 @@ public class ObjectLoader {
     private void parseShape(Object object, Element elementObject) {
         DrawableShape shape = (DrawableShape) object;
 
-        Dimension dimension = this.parseDimension(elementObject);
         Vector2 position = this.parsePosition(elementObject);
         Texture texture = this.parseTexture(elementObject);
-
-        if (dimension != null) {
-            shape.setDimension(dimension);
-        }
+        Dimension dimension = this.parseDimension(elementObject);
 
         if (position != null) {
             shape.setPosition(position);
@@ -136,6 +132,10 @@ public class ObjectLoader {
 
         if (texture != null) {
             shape.setTexture(texture);
+        }
+
+        if (dimension != null) {
+            shape.setDimension(dimension);
         }
     }
 
