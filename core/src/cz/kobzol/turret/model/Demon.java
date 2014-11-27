@@ -26,4 +26,9 @@ public class Demon extends SpriteObject implements IDraggable {
 
         return obj;
     }
+
+    @Override
+    public boolean isDraggable() {
+        return true;
+    }
 }

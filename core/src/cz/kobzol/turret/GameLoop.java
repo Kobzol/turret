@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -20,6 +21,7 @@ public class GameLoop extends ApplicationAdapter {
 	SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     OrthographicCamera camera;
+    BitmapFont font;
 
     AssetManager assetManager;
     ObjectManager objectManager;
@@ -34,6 +36,8 @@ public class GameLoop extends ApplicationAdapter {
 		this.shapeRenderer = new ShapeRenderer();
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 1600, 800);
+        this.font = new BitmapFont();
+
         this.assetManager = this.preloadAssets();
         this.objectManager = new ObjectLoader(this.assetManager).parseObjectManager(Gdx.files.internal("game_objects.xml"));
 
@@ -45,6 +49,8 @@ public class GameLoop extends ApplicationAdapter {
         AssetManager assetManager = new AssetManager();
 
         assetManager.load("slot.png", Texture.class);
+        assetManager.load("turret.png", Texture.class);
+        assetManager.load("font.fnt", BitmapFont.class);
 
         assetManager.finishLoading();
         return assetManager;
@@ -89,5 +95,10 @@ public class GameLoop extends ApplicationAdapter {
         MouseState mouseState = new MouseState(mousePosition.x, mousePosition.y, Gdx.input.isButtonPressed(Input.Buttons.LEFT));
 
         this.game.handleDrag(mouseState);
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

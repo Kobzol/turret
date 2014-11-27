@@ -8,13 +8,17 @@ import cz.kobzol.turret.input.mouse.MouseState;
 public class Dragger {
     public void handleDrag(IDraggable draggableObject, MouseState mouseState, IDroppable dropObject) {
         DragContainer container = draggableObject.getDragContainer();
-        System.out.println(container.getDragState().toString());
 
         if (mouseState.isPressed()) {
             if (container.getDragState().equals(DragContainer.DragState.BEING_DRAGGED)) {
-                container.moveObjectTo(mouseState.getMousePosition());
+                if (!draggableObject.isDraggable()) {
+                    container.revertDrag();
+                }
+                else container.moveObjectTo(mouseState.getMousePosition());
             }
-            else if (draggableObject.getBoundingBox().contains(mouseState.getMousePosition()) && container.getDragState().equals(DragContainer.DragState.READY_TO_DRAG)) {
+            else if (draggableObject.getBoundingBox().contains(mouseState.getMousePosition()) &&
+                     container.getDragState().equals(DragContainer.DragState.READY_TO_DRAG) &&
+                     draggableObject.isDraggable()) {
                 container.startDrag();
             }
         }
