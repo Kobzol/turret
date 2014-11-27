@@ -1,12 +1,12 @@
 package cz.kobzol.turret.model;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import cz.kobzol.turret.graphics.IDrawable;
 import cz.kobzol.turret.graphics.IUpdatable;
 import cz.kobzol.turret.input.drag.Dragger;
 import cz.kobzol.turret.input.drag.IDraggable;
+import cz.kobzol.turret.input.drag.IDroppable;
 import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.util.AssetContainer;
 
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Represents a single game screen.
  */
-public abstract class Screen implements IDrawable, IUpdatable {
+public abstract class Screen implements IDrawable, IUpdatable, IDroppable {
     protected final AssetContainer assetContainer;
     protected final List<GameObject> objects = new ArrayList<GameObject>();
     protected final Dragger dragger = new Dragger();
@@ -60,6 +60,11 @@ public abstract class Screen implements IDrawable, IUpdatable {
         }
     }
 
+    @Override
+    public boolean receiveObject(IDraggable draggableObject) {
+        return false;
+    }
+
     public List<GameObject> getObjects() {
         return this.objects;
     }
@@ -67,7 +72,7 @@ public abstract class Screen implements IDrawable, IUpdatable {
     public void handleDrag(MouseState mouseState) {
         for (GameObject object : this.objects) {
             if (object instanceof IDraggable) {
-                this.dragger.handleDrag((IDraggable) object, mouseState);
+                this.dragger.handleDrag((IDraggable) object, mouseState, this);
             }
         }
     }

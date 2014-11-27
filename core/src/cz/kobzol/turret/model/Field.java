@@ -1,23 +1,21 @@
 package cz.kobzol.turret.model;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import cz.kobzol.turret.Game;
 import cz.kobzol.turret.graphics.IDrawable;
 import cz.kobzol.turret.graphics.IUpdatable;
-import cz.kobzol.turret.graphics.SpriteObject;
+import cz.kobzol.turret.input.drag.IDraggable;
+import cz.kobzol.turret.input.drag.IDroppable;
 
 import java.awt.Dimension;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Field with many slots.
  */
-public final class Field extends GameObject implements IDrawable, IUpdatable {
+public final class Field extends GameObject implements IDrawable, IDroppable, IUpdatable {
     private final Screen screen;
 
     private final Vector2 startPosition;
@@ -76,5 +74,18 @@ public final class Field extends GameObject implements IDrawable, IUpdatable {
                 slot.update();
             }
         }
+    }
+
+    @Override
+    public boolean receiveObject(IDraggable draggableObject) {
+        for (List<Slot> slotRow : this.slots) {
+            for (Slot slot : slotRow) {
+                if (slot.getBoundingBox().contains(draggableObject.getPosition())) {
+                    return slot.receiveObject(draggableObject);
+                }
+            }
+        }
+
+        return false;
     }
 }
