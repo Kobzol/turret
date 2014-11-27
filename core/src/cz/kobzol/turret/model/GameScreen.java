@@ -9,6 +9,9 @@ import cz.kobzol.turret.input.mouse.MouseState;
  * Represents the game screen.
  */
 public class GameScreen extends Screen {
+    private BuildState buildState = new BuildState();
+
+
     public GameScreen() {
 
     }

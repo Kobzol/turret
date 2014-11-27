@@ -1,12 +1,14 @@
 package cz.kobzol.turret.util;
 
 import com.badlogic.gdx.assets.AssetManager;
-import cz.kobzol.turret.model.GameObject;
 
 /**
  * Contains template objects and assets.
  */
 public class AssetContainer {
+    public static final String OBJECTS_XML = "obj/game_objects.xml";
+    public static final String FONT_ARIAL = "font/arial.fnt";
+
     private final AssetManager assetManager;
     private final ObjectManager objectManager;
 
