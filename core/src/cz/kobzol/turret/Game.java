@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import cz.kobzol.turret.input.mouse.MouseState;
+import cz.kobzol.turret.model.GameScreen;
 import cz.kobzol.turret.model.Screen;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
@@ -99,7 +100,7 @@ public final class Game {
     }
 
     public void start() {
-
+        this.screen = new GameScreen();
     }
 
     public void dispose() {
