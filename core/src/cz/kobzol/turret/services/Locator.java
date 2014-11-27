@@ -1,30 +1,30 @@
 package cz.kobzol.turret.services;
 
-import com.badlogic.gdx.assets.AssetManager;
 import cz.kobzol.turret.Game;
+import cz.kobzol.turret.util.AssetContainer;
 
 /**
  * Services locator for global access to objects.
  */
 public class Locator {
-    private AssetManager assetManager;
+    private AssetContainer assetContainer;
     private Game game;
 
     private Locator() {
 
     }
 
-    public void provide(AssetManager assetManager) {
-        this.assetManager = assetManager;
+    public void provide(AssetContainer assetManager) {
+        this.assetContainer = assetManager;
     }
     public void provide(Game game) {
         this.game = game;
     }
 
-    public AssetManager getAssetManager() {
-        assert(this.assetManager != null);
+    public AssetContainer getAssetContainer() {
+        assert(this.assetContainer != null);
 
-        return this.assetManager;
+        return this.assetContainer;
     }
     public Game getGame() {
         assert(this.game != null);
