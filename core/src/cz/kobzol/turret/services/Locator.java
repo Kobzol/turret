@@ -7,28 +7,28 @@ import cz.kobzol.turret.util.AssetContainer;
  * Services locator for global access to objects.
  */
 public class Locator {
-    private AssetContainer assetContainer;
-    private Game game;
+    private static AssetContainer assetContainer;
+    private static Game game;
 
     private Locator() {
 
     }
 
-    public void provide(AssetContainer assetManager) {
-        this.assetContainer = assetManager;
+    public static void provide(AssetContainer assetManager) {
+        Locator.assetContainer = assetManager;
     }
-    public void provide(Game game) {
-        this.game = game;
+    public static void provide(Game game) {
+        Locator.game = game;
     }
 
-    public AssetContainer getAssetContainer() {
-        assert(this.assetContainer != null);
+    public static AssetContainer getAssetContainer() {
+        assert(Locator.assetContainer != null);
 
-        return this.assetContainer;
+        return Locator.assetContainer;
     }
-    public Game getGame() {
-        assert(this.game != null);
+    public static Game getGame() {
+        assert(Locator.game != null);
 
-        return this.game;
+        return Locator.game;
     }
 }
