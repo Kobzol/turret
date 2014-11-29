@@ -62,7 +62,8 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
                     this.sprite.getScaleX(), this.sprite.getScaleY(), this.sprite.getRotation());
     }
 
-    public void drawShape(ShapeRenderer shapeRenderer) {
+    @Override
+    public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
         shapeRenderer.rect(this.getBoundingBox().x, this.getBoundingBox().y, this.getBoundingBox().width, this.getBoundingBox().height);
     }
 
@@ -117,7 +118,7 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
 
     }
 

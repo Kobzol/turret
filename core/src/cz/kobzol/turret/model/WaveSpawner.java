@@ -38,7 +38,11 @@ public class WaveSpawner implements IUpdatable {
                 GameObject object = this.waves.get(this.waveIndex).getObject();
                 this.notifyObjectSpawned(object);
             }
-            else this.waveIndex++;
+            else
+            {
+                this.notifyWaveEnded();
+                this.waveIndex++;
+            }
 
             this.spawning = this.waves.get(this.waveIndex).hasObject();
         }
@@ -53,8 +57,14 @@ public class WaveSpawner implements IUpdatable {
             listener.onObjectSpawned(object);
         }
     }
+    private void notifyWaveEnded() {
+        for (SpawnListener listener : this.listeners) {
+            listener.onWaveEnded();
+        }
+    }
 
     public static interface SpawnListener {
         void onObjectSpawned(GameObject object);
+        void onWaveEnded();
     }
 }

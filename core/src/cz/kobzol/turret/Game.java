@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -44,6 +45,8 @@ public final class Game {
         return new AssetContainer(assetManager, new ObjectManager());
     }
     private void preloadAssets(AssetManager assetManager) {
+        assetManager.load("img/turret.png", Texture.class);
+        assetManager.load("img/slot.png", Texture.class);
         assetManager.finishLoading();
     }
     private void registerServices() {
