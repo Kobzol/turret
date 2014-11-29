@@ -45,8 +45,8 @@ public final class Game {
         return new AssetContainer(assetManager, new ObjectManager());
     }
     private void preloadAssets(AssetManager assetManager) {
-        assetManager.load("img/turret.png", Texture.class);
-        assetManager.load("img/slot.png", Texture.class);
+        assetManager.load("img/grass.png", Texture.class);
+        assetManager.load("img/platform.png", Texture.class);
         assetManager.finishLoading();
     }
     private void registerServices() {

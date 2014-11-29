@@ -3,13 +3,10 @@ package cz.kobzol.turret.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.input.mouse.MouseState;
-import cz.kobzol.turret.services.Locator;
-import cz.kobzol.turret.util.AssetContainer;
 
 /**
  * Represents the game screen.
@@ -22,26 +19,7 @@ public class GameScreen extends Screen {
     private Field field = new Field(new Vector2(0, 0));
 
     public GameScreen() {
-        Demon demon = new Demon();
-        demon.setTexture(Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON_IMG, Texture.class));
 
-        Wave wave = new Wave();
-        wave.addSpawnee(demon, 10);
-
-        this.waveSpawner.addWave(wave);
-        this.waveSpawner.addListener(new WaveSpawner.SpawnListener() {
-            @Override
-            public void onObjectSpawned(GameObject object) {
-
-            }
-
-            @Override
-            public void onWaveEnded() {
-                setBuildState();
-            }
-        });
-
-        this.waveSpawner.startSpawning();
     }
 
     private void setBuildState() {
