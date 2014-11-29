@@ -2,24 +2,103 @@ package cz.kobzol.turret.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import cz.kobzol.turret.input.click.Clicker;
 import cz.kobzol.turret.input.mouse.MouseState;
+import cz.kobzol.turret.services.Locator;
+import cz.kobzol.turret.util.AssetContainer;
+
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the game screen.
  */
 public class GameScreen extends Screen {
     private BuildState buildState = new BuildState();
+    private BitmapFont font;
+    private Clicker clicker = new Clicker();
+
+    private MouseState lastMouseState;
 
     private WaveSpawner waveSpawner = new WaveSpawner();
 
-    private Field field = new Field(new Vector2(0, 0));
+    private Field field = new Field();
+
+    private List<Demon> demons = new ArrayList<Demon>();
+    private List<Turret> turrets = new ArrayList<Turret>();
+    private TurretBar turretBar;
+    private Button startWaveButton;
+
+    private Turret selectedTurret;
 
     public GameScreen() {
+        this.font = Locator.getAssetContainer().getAssetManager().get(AssetContainer.FONT_ARIAL, BitmapFont.class);
+        this.font.setColor(Color.BLACK);
 
+        this.prepareGUI();
+        this.prepareWaves();
+    }
+
+    private void prepareGUI() {
+        this.field.setPosition(new Vector2(0, 0));
+
+        this.turretBar = new TurretBar(new TurretBar.TurretBarListener() {
+            @Override
+            public void onTurretSelected(Turret turret) {
+                if (selectedTurret == null) {
+                    selectedTurret = (Turret) turret.clone();
+                }
+            }
+        });
+
+        this.turretBar.setPosition(new Vector2(200, 650));
+        this.turretBar.setDimension(new Dimension(200, 100));
+
+        this.startWaveButton = new Button("Start wave", new Button.OnClickListener() {
+            @Override
+            public void onClick() {
+                if (buildState.isBuilding()) {
+                    startWave();
+                }
+            }
+        });
+        this.startWaveButton.setPosition(new Vector2(1000, 650));
+    }
+    private void prepareWaves() {
+        Wave wave1 = new Wave();
+        wave1.addSpawnee(Locator.getAssetContainer().getObjectManager().getObjectByKey("demon"), 1);
+
+        this.waveSpawner.addWave(wave1);
+
+        this.waveSpawner.addListener(new WaveSpawner.SpawnListener() {
+            @Override
+            public void onObjectSpawned(GameObject object) {
+                spawnDemon((Demon) object);
+            }
+
+            @Override
+            public void onWaveEnded() {
+                stopWave();
+            }
+        });
+    }
+
+    private void spawnDemon(Demon demon) {
+        this.demons.add(demon);
+    }
+    private void startWave() {
+        this.setDefenseState();
+        this.waveSpawner.startSpawning();
+    }
+    private void stopWave() {
+        this.setBuildState();
     }
 
     private void setBuildState() {
@@ -29,28 +108,72 @@ public class GameScreen extends Screen {
         this.buildState.setDefending();
     }
 
+    public MouseState getLastMouseState() {
+        return this.lastMouseState;
+    }
+    public Turret getSelectedTurret() {
+        return this.selectedTurret;
+    }
+
+    public void onTurretSpawned(Turret turret) {
+        this.selectedTurret = null;
+        this.turrets.add(turret);
+    }
+
     @Override
     public void render(Batch batch, Camera camera) {
         Gdx.gl20.glClearColor(255, 255, 255, 255);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        this.turretBar.render(batch, camera);
+        this.startWaveButton.render(batch, camera);
         this.field.render(batch, camera);
+
+        for (Demon demon : this.demons) {
+            demon.render(batch, camera);
+        }
+
+        for (Turret turret : this.turrets) {
+            turret.render(batch, camera);
+        }
+
+        if (this.selectedTurret != null) {
+            this.selectedTurret.render(batch, camera);
+        }
+
+        font.draw(batch, this.buildState.isBuilding() ? "building" : "defending", 0, camera.viewportHeight - 50);
     }
 
     @Override
     public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
-
+        this.startWaveButton.renderShape(shapeRenderer, camera);
     }
 
     @Override
     public void update(float delta) {
         this.waveSpawner.update(delta);
-
+        this.turretBar.update(delta);
         this.field.update(delta);
+
+        for (Demon demon : this.demons) {
+            demon.update(this, delta);
+        }
+
+        for (Turret turret : this.turrets) {
+            turret.update(delta);
+        }
     }
 
     @Override
     public void handleInput(MouseState mouseState) {
+        this.lastMouseState = mouseState;
 
+        this.clicker.handleClick(this.startWaveButton, mouseState);
+        this.clicker.handleClick(this.field, mouseState);
+        this.turretBar.handleInput(this.clicker, mouseState);
+
+        if (this.selectedTurret != null) {
+            this.selectedTurret.setPosition(mouseState.getMousePosition());
+        }
     }
 }

@@ -38,14 +38,14 @@ public class Button extends SpriteObject implements IClickable {
 
     @Override
     public void render(Batch batch, Camera camera) {
-        this.font.draw(batch, this.text, this.getPosition().x, this.getPosition().y + this.getDimension().height);
+        this.font.draw(batch, this.text, this.getPosition().x - this.getDimension().width / 2, this.getPosition().y + this.getDimension().height / 2);
     }
 
     @Override
     public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
         shapeRenderer.set(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(this.getPosition().x, this.getPosition().y, this.getDimension().width, this.getDimension().height);
+        shapeRenderer.rect(this.getPosition().x - this.getDimension().width / 2, this.getPosition().y - this.getDimension().height / 2, this.getDimension().width, this.getDimension().height);
     }
 
     @Override

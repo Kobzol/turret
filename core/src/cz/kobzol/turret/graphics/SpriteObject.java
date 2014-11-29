@@ -126,10 +126,16 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     public Object clone() {
         SpriteObject obj = (SpriteObject) super.clone();
         obj.sprite = new Sprite();
+
+        Dimension originalDimension = this.getDimension();
+
         obj.setTexture(new Texture(this.getTexture().getTextureData()));
         obj.position = new Vector2(this.getPosition());
         obj.direction = new Vector2(this.getDirection());
-        obj.dimension = (Dimension) this.getDimension().clone();
+        obj.dimension = originalDimension;
+        obj.setDimension(obj.dimension);
+
+        this.setDimension(originalDimension);
 
         return obj;
     }

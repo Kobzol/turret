@@ -38,13 +38,13 @@ public class WaveSpawner implements IUpdatable {
                 GameObject object = this.waves.get(this.waveIndex).getObject();
                 this.notifyObjectSpawned(object);
             }
-            else
-            {
+
+            this.spawning = this.waves.get(this.waveIndex).hasObject();
+
+            if (!spawning) {
                 this.notifyWaveEnded();
                 this.waveIndex++;
             }
-
-            this.spawning = this.waves.get(this.waveIndex).hasObject();
         }
     }
 

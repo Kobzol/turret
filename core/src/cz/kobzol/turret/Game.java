@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -15,6 +16,7 @@ import cz.kobzol.turret.model.GameScreen;
 import cz.kobzol.turret.model.Screen;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
+import cz.kobzol.turret.util.ObjectLoader;
 import cz.kobzol.turret.util.ObjectManager;
 
 /**
@@ -40,13 +42,17 @@ public final class Game {
         AssetManager assetManager = new AssetManager();
         this.preloadAssets(assetManager);
 
-        //ObjectManager objectManager = new ObjectLoader(assetManager).parseObjectManager(Gdx.files.internal("game_objects.xml"));
+        ObjectManager objectManager = new ObjectLoader(assetManager).parseObjectManager(Gdx.files.internal(AssetContainer.OBJECTS_XML));
 
-        return new AssetContainer(assetManager, new ObjectManager());
+        return new AssetContainer(assetManager, objectManager);
     }
     private void preloadAssets(AssetManager assetManager) {
-        assetManager.load("img/grass.png", Texture.class);
-        assetManager.load("img/platform.png", Texture.class);
+        assetManager.load(AssetContainer.FONT_ARIAL, BitmapFont.class);
+        assetManager.load(AssetContainer.GRASS_IMG, Texture.class);
+        assetManager.load(AssetContainer.PLATFORM_IMG, Texture.class);
+        assetManager.load(AssetContainer.TURRET_BAR_IMG, Texture.class);
+        assetManager.load(AssetContainer.TURRET1_IMG, Texture.class);
+        assetManager.load(AssetContainer.TURRET1_CANON_IMG, Texture.class);
         assetManager.finishLoading();
     }
     private void registerServices() {
@@ -58,6 +64,10 @@ public final class Game {
         this.shapeRenderer = new ShapeRenderer();
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 1600, 800);
+    }
+
+    public Screen getActiveScreen() {
+        return this.screen;
     }
 
     private void handleInput() {
@@ -89,6 +99,7 @@ public final class Game {
     }
     private void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
         shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.setAutoShapeType(true);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
         screen.renderShape(shapeRenderer, camera);
