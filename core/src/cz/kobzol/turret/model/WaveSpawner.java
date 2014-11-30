@@ -35,7 +35,7 @@ public class WaveSpawner implements IUpdatable {
 
         if (this.cooldown.resetIfReady()) {
             if (this.waves.get(this.waveIndex).hasObject()) {
-                GameObject object = this.waves.get(this.waveIndex).getObject();
+                GameObject object = (GameObject) this.waves.get(this.waveIndex).getObject().clone();
                 this.notifyObjectSpawned(object);
             }
 

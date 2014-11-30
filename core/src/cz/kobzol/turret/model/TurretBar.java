@@ -19,18 +19,29 @@ import java.util.List;
  */
 public class TurretBar extends SpriteObject {
     private final TurretBarListener listener;
-    private final Dimension dimension = new Dimension(500, 100);
 
     private List<TurretSpawner> spawners = new ArrayList<TurretSpawner>();
-
-    private TurretSpawner selectedSpawner;
 
     public TurretBar(TurretBarListener listener) {
         this.listener = listener;
 
         this.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET_BAR_IMG));
 
-        Turret turret = (Turret) Locator.getAssetContainer().getObjectManager().getObjectByKey("turret");
+        this.prepareTurretSpawners();
+
+        this.repositionSpawners();
+    }
+
+    private void prepareTurretSpawners() {
+        LaserTurretCanon canon = new LaserTurretCanon(200, 50, 100);
+        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_CANON_IMG));
+        canon.setDimension(new Dimension(30, 30));
+        canon.setOrigin(15, 5);
+
+        Turret turret = new Turret(canon);
+        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_IMG));
+        turret.setDimension(new Dimension(30, 30));
+
         TurretSpawner turretSpawner = new TurretSpawner(turret, new TurretSpawner.OnClickListener() {
             @Override
             public void onClick(TurretSpawner turretSpawner) {
@@ -38,14 +49,14 @@ public class TurretBar extends SpriteObject {
             }
         });
 
-        this.repositionSpawners();
-
         this.spawners.add(turretSpawner);
     }
 
     private void repositionSpawners() {
+        Vector2 leftMargin = new Vector2(this.getPosition().x - this.getDimension().width / 2 + 50, this.getPosition().y);
+
         for (int i = 0; i < this.spawners.size(); i++) {
-            this.spawners.get(i).setPosition(new Vector2(this.getPosition().x + i * this.spawners.get(i).getDimension().width, this.getPosition().y));
+            this.spawners.get(i).setPosition(new Vector2(leftMargin.x + i * this.spawners.get(i).getDimension().width, leftMargin.y));
         }
     }
 
@@ -65,13 +76,13 @@ public class TurretBar extends SpriteObject {
         }
     }
 
-    public static interface TurretBarListener {
-        void onTurretSelected(Turret turret);
-    }
-
     public void handleInput(Clicker clicker, MouseState mouseState) {
         for (TurretSpawner spawner : this.spawners) {
             clicker.handleClick(spawner, mouseState);
         }
+    }
+
+    public static interface TurretBarListener {
+        void onTurretSelected(Turret turret);
     }
 }

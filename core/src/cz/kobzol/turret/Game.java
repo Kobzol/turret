@@ -48,11 +48,17 @@ public final class Game {
     }
     private void preloadAssets(AssetManager assetManager) {
         assetManager.load(AssetContainer.FONT_ARIAL, BitmapFont.class);
+
         assetManager.load(AssetContainer.GRASS_IMG, Texture.class);
         assetManager.load(AssetContainer.PLATFORM_IMG, Texture.class);
         assetManager.load(AssetContainer.TURRET_BAR_IMG, Texture.class);
+
         assetManager.load(AssetContainer.TURRET1_IMG, Texture.class);
         assetManager.load(AssetContainer.TURRET1_CANON_IMG, Texture.class);
+        assetManager.load(AssetContainer.TURRET1_BULLET_IMG, Texture.class);
+
+        assetManager.load(AssetContainer.DEMON1_IMG, Texture.class);
+
         assetManager.finishLoading();
     }
     private void registerServices() {

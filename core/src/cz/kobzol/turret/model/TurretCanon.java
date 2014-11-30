@@ -3,10 +3,12 @@ package cz.kobzol.turret.model;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.util.Cooldown;
 
+import java.util.List;
+
 /**
  * Turret canon.
  */
-public class TurretCanon extends SpriteObject {
+public abstract class TurretCanon extends SpriteObject {
     protected float range;
     protected float damage;
 
@@ -18,8 +20,7 @@ public class TurretCanon extends SpriteObject {
         this.fire_cooldown = new Cooldown(fire_delay);
     }
 
-    @Override
-    public void update(float delta) {
+    public void handleDemons(List<Demon> demons, float delta) {
         super.update(delta);
 
         this.fire_cooldown.update(delta);

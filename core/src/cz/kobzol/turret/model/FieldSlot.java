@@ -21,11 +21,15 @@ public class FieldSlot {
         this.y = y;
     }
 
-    public void markAsPlatform() {
-        this.platform = true;
+    public void setPlatform(boolean platform) {
+        this.platform = platform;
     }
     public boolean isPlatform() {
         return this.platform;
+    }
+
+    public boolean isEmpty() {
+        return this.objects.size() == 0;
     }
 
     public void addObject(SpriteObject object) {

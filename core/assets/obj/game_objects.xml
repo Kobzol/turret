@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level>
     <objects>
-        <object interfaces="graphics.SpriteObject" class="model.Demon"  key="demon">
-            <position x="0" y="0" />
-            <dimension width="30" height="30" />
-            <texture value="img/platform.png" />
-            <rotation value="90" />
-        </object>
-        <object interfaces="graphics.SpriteObject" class="model.Turret"  key="turret">
-            <position x="0" y="0" />
-            <dimension width="30" height="30" />
-            <texture value="img/turrets/turret1_body.png" />
-            <rotation value="90" />
-        </object>
     </objects>
 </level>

@@ -13,7 +13,6 @@ public class Clicker {
 
         if (mouseState.isPressed()) {
             if (boundingBox.contains(mouseState.getMousePosition())) {
-                System.out.println("click");
                 if (container.getClickState().equals(ClickContainer.ClickState.READY_TO_CLICK)) {
                     container.setMouseHold();
                 }

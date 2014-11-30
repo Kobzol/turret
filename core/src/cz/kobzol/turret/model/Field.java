@@ -9,12 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.ClickContainer;
 import cz.kobzol.turret.input.click.IClickable;
-import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
 
 import java.awt.Dimension;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Field with demons and turrets.
@@ -45,14 +45,18 @@ public class Field extends SpriteObject implements IClickable {
 
     private FieldSlot[][] preparePlatforms(int width, int height) {
         FieldSlot[][] slots = new FieldSlot[height][width];
+        Random rand = new Random();
+
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 slots[y][x] = new FieldSlot(x, y);
+
+                if (rand.nextBoolean()) {
+                    slots[y][x].setPlatform(true);
+                }
             }
         }
-
-        slots[5][8].markAsPlatform();
 
         return slots;
     }
@@ -62,17 +66,17 @@ public class Field extends SpriteObject implements IClickable {
 
             if (this.objectPositions.containsKey(object)) {
                 Vector2 oldPosition = this.objectPositions.get(object);
-                this.slots[(int) oldPosition.y][(int) oldPosition.x].removeObject(object);
+                this.getSlot(oldPosition).removeObject(object);
             }
 
             objectPositions.put(object, position);
-            this.slots[(int) position.y][(int) position.x].addObject(object);
+            this.getSlot(position).addObject(object);
 
             return true;
         }
         else if (this.objectPositions.containsKey(object)) {
             Vector2 oldPosition = this.objectPositions.get(object);
-            this.slots[(int) oldPosition.y][(int) oldPosition.x].removeObject(object);
+            this.getSlot(oldPosition).removeObject(object);
         }
 
         return false;
@@ -88,7 +92,8 @@ public class Field extends SpriteObject implements IClickable {
 
         return rectangle.contains(coords) && coords.x < marginX && coords.y < marginY;
     }
-    private Vector2 getSlotPosition(Vector2 coords) {
+
+    public Vector2 getSlotPosition(Vector2 coords) {
         coords.sub(this.getPosition()); // normalized position
 
         int x = (int) coords.x / (int) this.slotDimension.getWidth();
@@ -96,7 +101,7 @@ public class Field extends SpriteObject implements IClickable {
 
         return new Vector2(x, y);
     }
-    private Vector2 getSlotCoordinates(Vector2 slotPosition) {
+    public Vector2 getSlotCoordinates(Vector2 slotPosition) {
         int x = (int) (slotPosition.x * this.slotDimension.width);
         int y = (int) (slotPosition.y * this.slotDimension.height);
 
@@ -105,6 +110,18 @@ public class Field extends SpriteObject implements IClickable {
         coords.add(this.slotDimension.width / 2, this.slotDimension.height / 2);
 
         return coords;
+    }
+
+    public FieldSlot getSlot(Vector2 slotPosition) {
+        return this.slots[(int) slotPosition.y][(int) slotPosition.x];
+    }
+
+    public Vector2 getStartPosition() {
+        return this.getSlotCoordinates(new Vector2(0, this.dimension.height / 2));
+    }
+
+    public Vector2 getEndPosition() {
+        return this.getSlotCoordinates(new Vector2(this.dimension.width - 1, this.dimension.height / 2));
     }
 
     @Override
@@ -132,11 +149,7 @@ public class Field extends SpriteObject implements IClickable {
 
     @Override
     public Rectangle getBoundingBox() {
-        Rectangle rect = new Rectangle();
-
-        rect.set(this.getPosition().x, this.getPosition().y, this.getDimension().width, this.getDimension().height);
-
-        return rect;
+        return new Rectangle(this.getPosition().x, this.getPosition().y, this.getDimension().width, this.getDimension().height);
     }
 
     @Override
@@ -157,20 +170,20 @@ public class Field extends SpriteObject implements IClickable {
     @Override
     public void onClick() {
         GameScreen scr = (GameScreen) Locator.getGame().getActiveScreen();
-        MouseState mouseState = scr.getLastMouseState();
-
-        System.out.println("click");
 
         if (scr.getSelectedTurret() != null) {
             Turret turret = scr.getSelectedTurret();
 
-            if (this.registerObject(turret)) {
-                scr.onTurretSpawned(turret);
+            Vector2 position = this.getSlotPosition(turret.getPosition());
 
-                Vector2 position = this.getSlotPosition(turret.getPosition());
-                Vector2 coords = this.getSlotCoordinates(position);
+            if (this.getSlot(position).isPlatform() && this.getSlot(position).isEmpty()) {
+                if (this.registerObject(turret)) {
+                    scr.onTurretSpawned(turret);
 
-                turret.setPosition(coords);
+                    Vector2 coords = this.getSlotCoordinates(position);
+
+                    turret.setPosition(coords);
+                }
             }
         }
     }

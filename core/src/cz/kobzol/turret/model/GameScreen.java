@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -58,8 +59,8 @@ public class GameScreen extends Screen {
             }
         });
 
-        this.turretBar.setPosition(new Vector2(200, 650));
-        this.turretBar.setDimension(new Dimension(200, 100));
+        this.turretBar.setPosition(new Vector2(250, 650));
+        this.turretBar.setDimension(new Dimension(500, 100));
 
         this.startWaveButton = new Button("Start wave", new Button.OnClickListener() {
             @Override
@@ -73,7 +74,10 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        wave1.addSpawnee(Locator.getAssetContainer().getObjectManager().getObjectByKey("demon"), 1);
+        Demon demon = new Demon(100);
+        demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
+        demon.setDimension(new Dimension(30, 30));
+        wave1.addSpawnee(demon, 1);
 
         this.waveSpawner.addWave(wave1);
 
@@ -92,6 +96,7 @@ public class GameScreen extends Screen {
 
     private void spawnDemon(Demon demon) {
         this.demons.add(demon);
+        demon.setPosition(this.field.getStartPosition());
     }
     private void startWave() {
         this.setDefenseState();
@@ -113,6 +118,9 @@ public class GameScreen extends Screen {
     }
     public Turret getSelectedTurret() {
         return this.selectedTurret;
+    }
+    public List<Demon> getDemons() {
+        return this.demons;
     }
 
     public void onTurretSpawned(Turret turret) {
@@ -147,6 +155,14 @@ public class GameScreen extends Screen {
     @Override
     public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
         this.startWaveButton.renderShape(shapeRenderer, camera);
+
+        for (Turret turret : this.turrets) {
+            turret.renderShape(shapeRenderer, camera);
+        }
+
+        for (Demon demon : this.demons) {
+            demon.renderShape(shapeRenderer, camera);
+        }
     }
 
     @Override
@@ -160,7 +176,7 @@ public class GameScreen extends Screen {
         }
 
         for (Turret turret : this.turrets) {
-            turret.update(delta);
+            turret.update(this, delta);
         }
     }
 
