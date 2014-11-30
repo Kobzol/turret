@@ -51,7 +51,7 @@ public class TurretBar extends SpriteObject {
 
         this.spawners.add(turretSpawner);
 
-        canon = new LaserTurretCanon(200, 50, 100);
+        canon = new FreezeTurretCanon(200, 50, 100);
         canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
         canon.setDimension(new Dimension(30, 30));
         canon.setOrigin(15, 8);

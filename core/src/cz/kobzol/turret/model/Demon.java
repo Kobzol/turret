@@ -9,7 +9,10 @@ import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.services.Locator;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Attacking demon.
@@ -20,6 +23,8 @@ public class Demon extends SpriteObject {
 
     private FieldSlot target;
 
+    private List<Effect> effects = new ArrayList<Effect>();
+
     public Demon(float max_health, float speed) {
         this.health = this.max_health = max_health;
         this.setSpeed(speed);
@@ -28,6 +33,8 @@ public class Demon extends SpriteObject {
     @Override
     public void render(Batch batch, Camera camera) {
         super.render(batch, camera);
+
+        this.restoreEffects();
     }
 
     @Override
@@ -55,6 +62,12 @@ public class Demon extends SpriteObject {
     }
 
     public void update(GameScreen gameScreen, float delta) {
+        super.update(delta);
+
+        this.updateEffects(delta);
+
+        this.applyEffects();    // must be restored in render(Batch, Camera) !!
+
         Field field = gameScreen.getField();
 
         FieldSlot current = field.getSlotForObject(this);
@@ -75,6 +88,43 @@ public class Demon extends SpriteObject {
                     this.notifyFinished(gameScreen);
                 }
                 else this.target = null; // find new target
+            }
+        }
+    }
+
+    public void addEffect(Effect newEffect) {
+        boolean found = false;
+
+        for (Effect effect : this.effects) {
+            if (effect.getClass().equals(newEffect.getClass())) {
+                effect.refresh();
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            this.effects.add(newEffect);
+        }
+    }
+
+    private void applyEffects() {
+        for (Effect effect : this.effects) {
+            effect.apply(this);
+        }
+    }
+    private void restoreEffects() {
+        for (Effect effect : this.effects) {
+            effect.restore(this);
+        }
+    }
+
+    private void updateEffects(float delta) {
+        for (Iterator<Effect> it = this.effects.iterator(); it.hasNext();) {
+            Effect effect = it.next();
+
+            if (effect.update(delta)) {
+                it.remove();
             }
         }
     }
@@ -161,5 +211,14 @@ public class Demon extends SpriteObject {
 
     private void notifyDeath() {
         ((GameScreen) Locator.getGame().getActiveScreen()).notifyDemonDied(this);
+    }
+
+    @Override
+    public Object clone() {
+        Demon demon = (Demon) super.clone();
+        demon.effects = new ArrayList<Effect>();
+        demon.effects.addAll(this.effects);
+
+        return demon;
     }
 }

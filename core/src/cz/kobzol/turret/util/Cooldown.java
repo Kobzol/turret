@@ -3,7 +3,7 @@ package cz.kobzol.turret.util;
 /**
  * Represents time cooldown in milliseconds.
  */
-public class Cooldown {
+public class Cooldown implements Cloneable {
     private final long interval_ms;
     private double elapsed_s;
 

@@ -15,8 +15,10 @@ public class FreezeTurretCanon extends LaserTurretCanon {
             super(damage, canon);
         }
 
+        @Override
         protected void dealDamage(Demon demon) {
             demon.receiveDamage(this.getDamage() * 2.0f);
+            demon.addEffect(new VelocityEffect(1000, 0.5f));
         }
     }
 
