@@ -16,11 +16,13 @@ import java.awt.Dimension;
 public abstract class SpriteObject extends DrawableShape implements IMovable, IRotable, ICollidable, IUpdatable {
     protected Sprite sprite;
     protected Vector2 direction;
+    protected Vector2 moveDirection;
     protected float speed;
 
     public SpriteObject() {
         this.sprite = new Sprite();
         this.direction = new Vector2(0, 1);
+        this.moveDirection = this.direction.cpy();
     }
 
     public float getSpeed() {
@@ -71,7 +73,7 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     public void move(float delta) {
         float speed = this.speed * delta;
 
-        Vector2 move_vector = new Vector2(this.direction);
+        Vector2 move_vector = new Vector2(this.moveDirection);
 
         this.setPosition(this.getPosition().add(move_vector.scl(speed)));
     }
@@ -101,6 +103,16 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     @Override
     public void rotate(float angle) {
         this.setRotation(this.getRotation() + angle);
+    }
+
+    @Override
+    public Vector2 getMoveDirection() {
+        return this.moveDirection.cpy();
+    }
+
+    @Override
+    public void setMoveDirection(Vector2 moveDirection) {
+        this.moveDirection.set(moveDirection);
     }
 
     @Override
@@ -138,8 +150,9 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
             obj.setTexture(new Texture(this.getTexture().getTextureData()));
         }
 
-        obj.position = new Vector2(this.getPosition());
-        obj.direction = new Vector2(this.getDirection());
+        obj.position = this.getPosition().cpy();
+        obj.direction = this.getDirection().cpy();
+        obj.moveDirection = this.moveDirection.cpy();
         obj.dimension = originalDimension;
         obj.setDimension(obj.dimension);
 

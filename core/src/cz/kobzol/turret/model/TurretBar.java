@@ -33,7 +33,7 @@ public class TurretBar extends SpriteObject {
     }
 
     private void prepareTurretSpawners() {
-        LaserTurretCanon canon = new LaserTurretCanon(200, 50, 100);
+        TurretCanon canon = new LaserTurretCanon(200, 50, 100);
         canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_CANON_IMG));
         canon.setDimension(new Dimension(30, 30));
         canon.setOrigin(15, 8);
@@ -43,6 +43,24 @@ public class TurretBar extends SpriteObject {
         turret.setDimension(new Dimension(30, 30));
 
         TurretSpawner turretSpawner = new TurretSpawner(turret, new TurretSpawner.OnClickListener() {
+            @Override
+            public void onClick(TurretSpawner turretSpawner) {
+                TurretBar.this.listener.onTurretSelected(turretSpawner.getTurret());
+            }
+        });
+
+        this.spawners.add(turretSpawner);
+
+        canon = new LaserTurretCanon(200, 50, 100);
+        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
+        canon.setDimension(new Dimension(30, 30));
+        canon.setOrigin(15, 8);
+
+        turret = new Turret(canon);
+        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_IMG));
+        turret.setDimension(new Dimension(30, 30));
+
+        turretSpawner = new TurretSpawner(turret, new TurretSpawner.OnClickListener() {
             @Override
             public void onClick(TurretSpawner turretSpawner) {
                 TurretBar.this.listener.onTurretSelected(turretSpawner.getTurret());

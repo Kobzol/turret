@@ -76,10 +76,10 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(100, 500.0f);
+        Demon demon = new Demon(500, 100.0f);
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
-        wave1.addSpawnee(demon, 1);
+        wave1.addSpawnee(demon, 5);
 
         this.waveSpawner.addWave(wave1);
 

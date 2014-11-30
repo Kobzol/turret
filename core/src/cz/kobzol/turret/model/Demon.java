@@ -67,7 +67,7 @@ public class Demon extends SpriteObject {
             Vector2 slotCoords = field.getSlotCoordinates(this.target);
             Vector2 direction = slotCoords.cpy().sub(this.getPosition()).nor();
 
-            this.setDirection(direction);
+            this.setMoveDirection(direction);
             this.move(delta);
 
             if (slotCoords.dst(this.getPosition()) <= delta * this.speed) {

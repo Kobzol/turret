@@ -17,7 +17,7 @@ import java.util.List;
  * Turret canon that shoots lasers.
  */
 public class LaserTurretCanon extends TurretCanon {
-    private class Bullet extends SpriteObject {
+    protected class Bullet extends SpriteObject {
         private final float damage;
         private Demon target;
         private final LaserTurretCanon canon;
@@ -40,14 +40,23 @@ public class LaserTurretCanon extends TurretCanon {
             super.update(delta);
 
             if (this.target.collidesWith(this)) {
-                this.target.receiveDamage(this.damage);
+                this.dealDamage(this.target);
                 return true;
             }
 
-            this.setDirection(this.target.getPosition().sub(this.getPosition()).nor());
+            this.setMoveDirection(this.target.getPosition().sub(this.getPosition()).nor());
+            this.setDirection(this.getMoveDirection());
             this.move(delta);
 
             return false;
+        }
+
+        protected float getDamage() {
+            return this.damage;
+        }
+
+        protected void dealDamage(Demon demon) {
+            demon.receiveDamage(this.damage);
         }
     }
 
@@ -67,12 +76,18 @@ public class LaserTurretCanon extends TurretCanon {
     public LaserTurretCanon(float range, float damage, long fire_delay) {
         super(range, damage, fire_delay);
 
-        this.templateBullet = new Bullet(this.damage, this);
-        this.templateBullet.setSpeed(20.0f);
-        this.templateBullet.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_BULLET_IMG));
-        this.templateBullet.setDimension(new Dimension(8, 12));
+        this.templateBullet = this.createTemplateBullet();
 
         this.state = TurretState.FINDING_TARGET;
+    }
+
+    protected Bullet createTemplateBullet() {
+        Bullet bullet = new Bullet(this.damage, this);
+        bullet.setSpeed(250.0f);
+        bullet.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_BULLET_IMG));
+        bullet.setDimension(new Dimension(8, 12));
+
+        return bullet;
     }
 
     @Override
@@ -118,7 +133,9 @@ public class LaserTurretCanon extends TurretCanon {
         if (this.fire_cooldown.resetIfReady()) {
             Bullet bullet = (Bullet) this.templateBullet.clone();
             bullet.setTarget(demon);
-            bullet.setPosition(this.getPosition());
+
+            Vector2 position = this.getPosition();
+            bullet.setPosition(new Vector2(position.x, position.y - 10));
             bullet.setDirection(this.getDirection());
 
             this.bullets.add(bullet);
