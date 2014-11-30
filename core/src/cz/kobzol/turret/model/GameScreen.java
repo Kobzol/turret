@@ -76,7 +76,7 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(100);
+        Demon demon = new Demon(100, 500.0f);
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
         wave1.addSpawnee(demon, 1);
@@ -91,14 +91,14 @@ public class GameScreen extends Screen {
 
             @Override
             public void onWaveEnded() {
-                stopWave();
+
             }
         });
     }
 
     private void spawnDemon(Demon demon) {
         this.demons.add(demon);
-        demon.setPosition(this.field.getStartPosition());
+        demon.setPosition(this.field.getSlotCoordinates(this.field.getStartSlot()));
     }
     private void startWave() {
         this.setDefenseState();
@@ -145,7 +145,13 @@ public class GameScreen extends Screen {
         this.flaggedDemons.add(demon);
     }
     private void removeFlaggedDemons() {
+        boolean removed = this.flaggedDemons.size() > 0;
+
         this.demons.removeAll(this.flaggedDemons);
+
+        if (removed && !this.buildState.isBuilding() && this.demons.size() == 0) {
+            this.stopWave();
+        }
     }
 
     @Override

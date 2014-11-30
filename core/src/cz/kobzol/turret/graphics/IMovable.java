@@ -7,7 +7,7 @@ public interface IMovable {
     /**
      * Moves the object in it's direction with it's speed.
      */
-    void move();
+    void move(float delta);
 
     float getSpeed();
     void setSpeed(float speed);

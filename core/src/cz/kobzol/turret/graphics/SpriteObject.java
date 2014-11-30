@@ -68,8 +68,8 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     }
 
     @Override
-    public void move() {
-        float speed = this.speed;
+    public void move(float delta) {
+        float speed = this.speed * delta;
 
         Vector2 move_vector = new Vector2(this.direction);
 

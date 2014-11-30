@@ -45,7 +45,7 @@ public class LaserTurretCanon extends TurretCanon {
             }
 
             this.setDirection(this.target.getPosition().sub(this.getPosition()).nor());
-            this.move();
+            this.move(delta);
 
             return false;
         }

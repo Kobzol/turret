@@ -1,5 +1,6 @@
 package cz.kobzol.turret.model;
 
+import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 
 import java.util.ArrayList;
@@ -9,16 +10,23 @@ import java.util.List;
  * Slot on a field of objects.
  */
 public class FieldSlot {
-    private final int x;
-    private final int y;
+    private final Vector2 position;
+    private final int index;
 
     private boolean platform = false;
 
     private final List<SpriteObject> objects = new ArrayList<SpriteObject>();
 
-    public FieldSlot(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public FieldSlot(int x, int y, int index) {
+        this.position = new Vector2(x, y);
+        this.index = index;
+    }
+
+    public Vector2 getPosition() {
+        return this.position.cpy();
+    }
+    public int getIndex() {
+        return this.index;
     }
 
     public void setPlatform(boolean platform) {

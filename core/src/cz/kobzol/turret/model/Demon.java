@@ -2,12 +2,14 @@ package cz.kobzol.turret.model;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.services.Locator;
 
 import java.awt.Dimension;
+import java.util.LinkedList;
 
 /**
  * Attacking demon.
@@ -16,8 +18,16 @@ public class Demon extends SpriteObject {
     protected float max_health;
     protected float health;
 
-    public Demon(float max_health) {
+    private FieldSlot target;
+
+    public Demon(float max_health, float speed) {
         this.health = this.max_health = max_health;
+        this.setSpeed(speed);
+    }
+
+    @Override
+    public void render(Batch batch, Camera camera) {
+        super.render(batch, camera);
     }
 
     @Override
@@ -45,13 +55,100 @@ public class Demon extends SpriteObject {
     }
 
     public void update(GameScreen gameScreen, float delta) {
-        this.setPosition(new Vector2(this.getPosition().x + 5, this.getPosition().y));
-
         Field field = gameScreen.getField();
 
-        if (field.isAtFinish(this)) {
-            gameScreen.notifyDemonFinished(this);
+        FieldSlot current = field.getSlotForObject(this);
+
+        if (current != null) { // wait for field to register this object
+            if (this.target == null) {
+                this.target = this.findTarget(field);
+            }
+
+            Vector2 slotCoords = field.getSlotCoordinates(this.target);
+            Vector2 direction = slotCoords.cpy().sub(this.getPosition()).nor();
+
+            this.setDirection(direction);
+            this.move(delta);
+
+            if (slotCoords.dst(this.getPosition()) <= delta * this.speed) {
+                if (current == field.getEndSlot()) {
+                    this.notifyFinished(gameScreen);
+                }
+                else this.target = null; // find new target
+            }
         }
+    }
+
+    private void notifyFinished(GameScreen gameScreen) {
+        gameScreen.notifyDemonFinished(this);
+    }
+
+    private FieldSlot findTarget(Field field) {
+        FieldSlot end = field.getEndSlot();
+        FieldSlot current = field.getSlotForObject(this);
+
+        Dimension fieldDimension = field.getFieldDimension();
+        int slotCount = fieldDimension.width * fieldDimension.height;
+        int directions[][] = {
+                {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+        };
+
+        boolean[] visited = new boolean[slotCount];
+        int[] predecessors = new int[slotCount];
+        int[] distances = new int[slotCount];
+
+        for (int i = 0; i < distances.length; i++) {
+            distances[i] = Integer.MAX_VALUE;
+        }
+
+        distances[current.getIndex()] = 0;
+
+        LinkedList<FieldSlot> queue = new LinkedList<FieldSlot>();
+        queue.add(current);
+
+        while (queue.size() > 0) {
+            FieldSlot slot = queue.poll();
+
+            visited[slot.getIndex()] = true;
+
+            for (int[] shift : directions) {
+                int newX = (int) slot.getPosition().x + shift[0];
+                int newY = (int) slot.getPosition().y + shift[1];
+
+                if (field.containsIndex(newX, newY)) {
+                    Vector2 index = new Vector2(newX, newY);
+                    FieldSlot incident = field.getSlotForIndex(index);
+
+                    if (!visited[incident.getIndex()] && !incident.isPlatform()) {
+                        visited[incident.getIndex()] = true;
+                        predecessors[incident.getIndex()] = slot.getIndex();
+                        distances[incident.getIndex()] = distances[slot.getIndex()] + 1;
+
+                        if (incident == end) {
+                            break;
+                        }
+                        else queue.add(incident);
+                    }
+                }
+            }
+        }
+
+        assert(distances[end.getIndex()] < Integer.MAX_VALUE); // the path to the end was found
+
+        int lastTarget = end.getIndex();
+        int target = lastTarget;
+        while (true) {
+            if (field.getSlotForIndex(target) == current) {
+                target = lastTarget;
+                break;
+            }
+            else {
+                lastTarget = target;
+                target = predecessors[target];
+            }
+        }
+
+        return field.getSlotForIndex(target);
     }
 
     public void receiveDamage(float damage) {
