@@ -32,7 +32,11 @@ public class Demon extends SpriteObject {
 
     @Override
     public void render(Batch batch, Camera camera) {
+        this.applyEffects();
+
         super.render(batch, camera);
+
+        this.restoreEffects();
     }
 
     @Override

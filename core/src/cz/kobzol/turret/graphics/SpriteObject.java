@@ -19,9 +19,11 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     protected Vector2 direction;
     protected Vector2 moveDirection;
     protected float speed;
+    protected Color color;
 
     public SpriteObject() {
         this.sprite = new Sprite();
+        this.color = new Color(Color.WHITE);
         this.direction = new Vector2(0, 1);
         this.moveDirection = this.direction.cpy();
     }
@@ -60,7 +62,7 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     public void render(Batch batch, Camera camera) {
         Color color = batch.getColor();
 
-        batch.setColor(this.sprite.getColor());
+        batch.setColor(this.color);
 
         batch.draw(
                 this.sprite, this.sprite.getX() - this.sprite.getWidth() / 2, this.sprite.getY() - this.sprite.getHeight() / 2,
@@ -69,6 +71,13 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
                 this.sprite.getScaleX(), this.sprite.getScaleY(), this.sprite.getRotation());
 
         batch.setColor(color);
+    }
+
+    public void setColor(Color color) {
+        this.color = new Color(color);
+    }
+    public Color getColor() {
+        return new Color(this.color);
     }
 
     @Override
@@ -138,6 +147,10 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
 
     public void setOrigin(int x, int y) {
         this.sprite.setOrigin(x, y);
+    }
+
+    public Sprite getSprite() {
+        return this.sprite;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package cz.kobzol.turret.model;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
@@ -19,6 +20,7 @@ public class FreezeTurretCanon extends LaserTurretCanon {
         protected void dealDamage(Demon demon) {
             demon.receiveDamage(this.getDamage() * 2.0f);
             demon.addEffect(new VelocityEffect(1000, 0.5f));
+            demon.addEffect(new SpriteEffect(1000, new Color(0, 0, 1, 1)));
         }
     }
 
