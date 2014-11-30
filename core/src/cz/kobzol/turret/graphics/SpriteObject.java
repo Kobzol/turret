@@ -1,6 +1,7 @@
 package cz.kobzol.turret.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -57,11 +58,17 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
 
     @Override
     public void render(Batch batch, Camera camera) {
-            batch.draw(
-                    this.sprite, this.sprite.getX() - this.sprite.getWidth() / 2, this.sprite.getY() - this.sprite.getHeight() / 2,
-                    this.sprite.getOriginX(), this.sprite.getOriginY(),
-                    this.sprite.getWidth(), this.sprite.getHeight(),
-                    this.sprite.getScaleX(), this.sprite.getScaleY(), this.sprite.getRotation());
+        Color color = batch.getColor();
+
+        batch.setColor(this.sprite.getColor());
+
+        batch.draw(
+                this.sprite, this.sprite.getX() - this.sprite.getWidth() / 2, this.sprite.getY() - this.sprite.getHeight() / 2,
+                this.sprite.getOriginX(), this.sprite.getOriginY(),
+                this.sprite.getWidth(), this.sprite.getHeight(),
+                this.sprite.getScaleX(), this.sprite.getScaleY(), this.sprite.getRotation());
+
+        batch.setColor(color);
     }
 
     @Override

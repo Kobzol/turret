@@ -33,8 +33,6 @@ public class Demon extends SpriteObject {
     @Override
     public void render(Batch batch, Camera camera) {
         super.render(batch, camera);
-
-        this.restoreEffects();
     }
 
     @Override
@@ -66,7 +64,7 @@ public class Demon extends SpriteObject {
 
         this.updateEffects(delta);
 
-        this.applyEffects();    // must be restored in render(Batch, Camera) !!
+        this.applyEffects();
 
         Field field = gameScreen.getField();
 
@@ -90,6 +88,8 @@ public class Demon extends SpriteObject {
                 else this.target = null; // find new target
             }
         }
+
+        this.restoreEffects();
     }
 
     public void addEffect(Effect newEffect) {
