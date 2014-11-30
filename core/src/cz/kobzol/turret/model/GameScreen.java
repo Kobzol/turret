@@ -124,13 +124,24 @@ public class GameScreen extends Screen {
     public List<Demon> getDemons() {
         return this.demons;
     }
+    public Field getField() {
+        return this.field;
+    }
 
     public void onTurretSpawned(Turret turret) {
         this.selectedTurret = null;
         this.turrets.add(turret);
+        this.field.registerObject(turret);
     }
 
-    public void flagDemonDeath(Demon demon) {
+    public void notifyDemonDied(Demon demon) {
+        this.flagDemonDeath(demon);
+    }
+    public void notifyDemonFinished(Demon demon) {
+        this.flagDemonDeath(demon);
+    }
+
+    private void flagDemonDeath(Demon demon) {
         this.flaggedDemons.add(demon);
     }
     private void removeFlaggedDemons() {
@@ -184,6 +195,7 @@ public class GameScreen extends Screen {
 
         for (Demon demon : this.demons) {
             demon.update(this, delta);
+            this.field.registerObject(demon);
         }
 
         for (Turret turret : this.turrets) {

@@ -45,7 +45,13 @@ public class Demon extends SpriteObject {
     }
 
     public void update(GameScreen gameScreen, float delta) {
-        this.setPosition(new Vector2(this.getPosition().x + 1, this.getPosition().y));
+        this.setPosition(new Vector2(this.getPosition().x + 5, this.getPosition().y));
+
+        Field field = gameScreen.getField();
+
+        if (field.isAtFinish(this)) {
+            gameScreen.notifyDemonFinished(this);
+        }
     }
 
     public void receiveDamage(float damage) {
@@ -57,6 +63,6 @@ public class Demon extends SpriteObject {
     }
 
     private void notifyDeath() {
-        ((GameScreen) Locator.getGame().getActiveScreen()).flagDemonDeath(this);
+        ((GameScreen) Locator.getGame().getActiveScreen()).notifyDemonDied(this);
     }
 }

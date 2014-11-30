@@ -14,7 +14,6 @@ import cz.kobzol.turret.util.AssetContainer;
 
 import java.awt.Dimension;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  * Field with demons and turrets.
@@ -45,17 +44,16 @@ public class Field extends SpriteObject implements IClickable {
 
     private FieldSlot[][] preparePlatforms(int width, int height) {
         FieldSlot[][] slots = new FieldSlot[height][width];
-        Random rand = new Random();
-
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 slots[y][x] = new FieldSlot(x, y);
-
-                if (rand.nextBoolean()) {
-                    slots[y][x].setPlatform(true);
-                }
+                slots[y][x].setPlatform(true);
             }
+        }
+
+        for (int i = 0; i < width; i++) {
+            slots[height / 2][i].setPlatform(false);
         }
 
         return slots;
@@ -119,9 +117,14 @@ public class Field extends SpriteObject implements IClickable {
     public Vector2 getStartPosition() {
         return this.getSlotCoordinates(new Vector2(0, this.dimension.height / 2));
     }
-
     public Vector2 getEndPosition() {
         return this.getSlotCoordinates(new Vector2(this.dimension.width - 1, this.dimension.height / 2));
+    }
+    public boolean isAtFinish(SpriteObject object) {
+        Vector2 finishPosition = this.getSlotPosition(this.getEndPosition());
+        FieldSlot finishSlot = this.getSlot(finishPosition);
+
+        return finishSlot.containsObject(object);
     }
 
     @Override

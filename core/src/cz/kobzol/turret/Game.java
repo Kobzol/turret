@@ -69,7 +69,7 @@ public final class Game {
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
         this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 1600, 800);
+        this.camera.setToOrtho(false, 1560, 800);
     }
 
     public Screen getActiveScreen() {

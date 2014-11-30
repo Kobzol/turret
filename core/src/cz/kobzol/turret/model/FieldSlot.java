@@ -40,4 +40,7 @@ public class FieldSlot {
     public void removeObject(SpriteObject object) {
         this.objects.remove(object);
     }
+    public boolean containsObject(SpriteObject object) {
+        return this.objects.contains(object);
+    }
 }
