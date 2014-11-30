@@ -33,6 +33,8 @@ public class GameScreen extends Screen {
     private Field field = new Field();
 
     private List<Demon> demons = new ArrayList<Demon>();
+    private List<Demon> flaggedDemons = new ArrayList<Demon>();
+
     private List<Turret> turrets = new ArrayList<Turret>();
     private TurretBar turretBar;
     private Button startWaveButton;
@@ -128,6 +130,13 @@ public class GameScreen extends Screen {
         this.turrets.add(turret);
     }
 
+    public void flagDemonDeath(Demon demon) {
+        this.flaggedDemons.add(demon);
+    }
+    private void removeFlaggedDemons() {
+        this.demons.removeAll(this.flaggedDemons);
+    }
+
     @Override
     public void render(Batch batch, Camera camera) {
         Gdx.gl20.glClearColor(255, 255, 255, 255);
@@ -167,6 +176,8 @@ public class GameScreen extends Screen {
 
     @Override
     public void update(float delta) {
+        this.removeFlaggedDemons();
+
         this.waveSpawner.update(delta);
         this.turretBar.update(delta);
         this.field.update(delta);

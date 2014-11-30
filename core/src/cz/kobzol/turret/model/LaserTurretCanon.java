@@ -70,7 +70,7 @@ public class LaserTurretCanon extends TurretCanon {
         this.templateBullet = new Bullet(this.damage, this);
         this.templateBullet.setSpeed(20.0f);
         this.templateBullet.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_BULLET_IMG));
-        this.templateBullet.setDimension(new Dimension(10, 20));
+        this.templateBullet.setDimension(new Dimension(8, 12));
 
         this.state = TurretState.FINDING_TARGET;
     }
@@ -119,6 +119,7 @@ public class LaserTurretCanon extends TurretCanon {
             Bullet bullet = (Bullet) this.templateBullet.clone();
             bullet.setTarget(demon);
             bullet.setPosition(this.getPosition());
+            bullet.setDirection(this.getDirection());
 
             this.bullets.add(bullet);
         }
@@ -163,6 +164,7 @@ public class LaserTurretCanon extends TurretCanon {
                 }
                 else this.rotate(canon_rotation);
             }
+            else this.setRotation(90);
         }
     }
 }
