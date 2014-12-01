@@ -1,6 +1,7 @@
 package cz.kobzol.turret.model;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -33,7 +34,12 @@ public class TurretBar extends SpriteObject {
     }
 
     private void prepareTurretSpawners() {
-        TurretCanon canon = new LaserTurretCanon(200, 50, 100);
+        TurretCanon canon = new LaserTurretCanon(200, 50, 100, 300, new LaserTurretCanon.IDamager() {
+            @Override
+            public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet) {
+                demon.receiveDamage(bullet.getDamage());
+            }
+        });
         canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_CANON_IMG));
         canon.setDimension(new Dimension(30, 30));
         canon.setOrigin(15, 8);
@@ -51,7 +57,14 @@ public class TurretBar extends SpriteObject {
 
         this.spawners.add(turretSpawner);
 
-        canon = new FreezeTurretCanon(200, 50, 100);
+        canon = new LaserTurretCanon(200, 50, 100, 200, new LaserTurretCanon.IDamager() {
+            @Override
+            public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet) {
+                demon.receiveDamage(bullet.getDamage());
+                demon.addEffect(new VelocityEffect(1000, 0.5f));
+                demon.addEffect(new SpriteEffect(1000, new Color(0, 0, 1, 1)));
+            }
+        });
         canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
         canon.setDimension(new Dimension(30, 30));
         canon.setOrigin(15, 8);

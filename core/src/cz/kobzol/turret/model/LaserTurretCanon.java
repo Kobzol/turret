@@ -17,14 +17,21 @@ import java.util.List;
  * Turret canon that shoots lasers.
  */
 public class LaserTurretCanon extends TurretCanon {
+    public static interface IDamager {
+        public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet);
+    }
     protected class Bullet extends SpriteObject {
         private final float damage;
         private Demon target;
         private final LaserTurretCanon canon;
+        private final IDamager iDamager;
 
-        public Bullet(float damage, LaserTurretCanon canon) {
+        public Bullet(float damage, LaserTurretCanon canon, float speed, IDamager iDamager) {
             this.canon = canon;
             this.damage = damage;
+
+            this.setSpeed(speed);
+            this.iDamager = iDamager;
         }
 
         public void setTarget(Demon target) {
@@ -40,7 +47,7 @@ public class LaserTurretCanon extends TurretCanon {
             super.update(delta);
 
             if (this.target.collidesWith(this)) {
-                this.dealDamage(this.target);
+                this.iDamager.dealDamage(this.target, this);
                 return true;
             }
 
@@ -53,10 +60,6 @@ public class LaserTurretCanon extends TurretCanon {
 
         protected float getDamage() {
             return this.damage;
-        }
-
-        protected void dealDamage(Demon demon) {
-            demon.receiveDamage(this.damage);
         }
     }
 
@@ -73,17 +76,16 @@ public class LaserTurretCanon extends TurretCanon {
     private Bullet templateBullet;
     private List<Bullet> bullets = new ArrayList<Bullet>();
 
-    public LaserTurretCanon(float range, float damage, long fire_delay) {
-        super(range, damage, fire_delay);
+    public LaserTurretCanon(float range, float damage, long fireDelay, float bulletSpeed, IDamager iDamager) {
+        super(range, damage, fireDelay);
 
-        this.templateBullet = this.createTemplateBullet();
+        this.templateBullet = this.createTemplateBullet(bulletSpeed, iDamager);
 
         this.state = TurretState.FINDING_TARGET;
     }
 
-    protected Bullet createTemplateBullet() {
-        Bullet bullet = new Bullet(this.damage, this);
-        bullet.setSpeed(250.0f);
+    protected Bullet createTemplateBullet(float bulletSpeed, IDamager iDamager) {
+        Bullet bullet = new Bullet(this.damage, this, bulletSpeed, iDamager);
         bullet.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_BULLET_IMG));
         bullet.setDimension(new Dimension(8, 12));
 
