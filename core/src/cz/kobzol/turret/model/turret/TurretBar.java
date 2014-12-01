@@ -9,6 +9,7 @@ import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.Clicker;
 import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.model.Demon;
+import cz.kobzol.turret.model.effect.DamageOverTimeEffect;
 import cz.kobzol.turret.model.effect.SpriteEffect;
 import cz.kobzol.turret.model.effect.VelocityEffect;
 import cz.kobzol.turret.services.Locator;
@@ -65,7 +66,32 @@ public class TurretBar extends SpriteObject {
             public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet) {
                 demon.receiveDamage(bullet.getDamage());
                 demon.addEffect(new VelocityEffect(1000, 0.5f));
-                demon.addEffect(new SpriteEffect(1000, new Color(0, 0, 1, 1)));
+                demon.addEffect(new SpriteEffect(1000, new Color(0, 0, 1, 0.5f)));
+            }
+        });
+        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
+        canon.setDimension(new Dimension(30, 30));
+        canon.setOrigin(15, 8);
+
+        turret = new Turret(canon);
+        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_IMG));
+        turret.setDimension(new Dimension(30, 30));
+
+        turretSpawner = new TurretSpawner(turret, new TurretSpawner.OnClickListener() {
+            @Override
+            public void onClick(TurretSpawner turretSpawner) {
+                TurretBar.this.listener.onTurretSelected(turretSpawner.getTurret());
+            }
+        });
+
+        this.spawners.add(turretSpawner);
+
+        canon = new LaserTurretCanon(200, 50, 500, 200, new LaserTurretCanon.IDamager() {
+            @Override
+            public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet) {
+                demon.receiveDamage(bullet.getDamage());
+                demon.addEffect(new DamageOverTimeEffect(1000, 3, 30));
+                demon.addEffect(new SpriteEffect(1000, new Color(0, 1, 0, 0.8f)));
             }
         });
         canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
