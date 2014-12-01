@@ -1,4 +1,4 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.model.effect;
 
 import com.badlogic.gdx.graphics.Color;
 import cz.kobzol.turret.graphics.SpriteObject;

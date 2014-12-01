@@ -1,4 +1,4 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.model.turret;
 
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.ClickContainer;

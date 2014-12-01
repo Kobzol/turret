@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.input.click.Clicker;
 import cz.kobzol.turret.input.mouse.MouseState;
+import cz.kobzol.turret.model.turret.Turret;
+import cz.kobzol.turret.model.turret.TurretBar;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
 

@@ -1,10 +1,11 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.model.turret;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
+import cz.kobzol.turret.model.Demon;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
 

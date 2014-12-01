@@ -1,4 +1,4 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.model.turret;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.Clicker;
 import cz.kobzol.turret.input.mouse.MouseState;
+import cz.kobzol.turret.model.Demon;
+import cz.kobzol.turret.model.effect.SpriteEffect;
+import cz.kobzol.turret.model.effect.VelocityEffect;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
 

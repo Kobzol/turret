@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.ClickContainer;
 import cz.kobzol.turret.input.click.IClickable;
+import cz.kobzol.turret.model.turret.Turret;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
 
