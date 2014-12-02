@@ -39,4 +39,9 @@ public class DamageOverTimeEffect extends Effect {
 
         return super.update(delta);
     }
+
+    @Override
+    public boolean stack() {
+        return false;
+    }
 }

@@ -19,11 +19,16 @@ public class SpriteEffect extends Effect {
     @Override
     public void apply(SpriteObject object) {
         this.oldColor = object.getColor();
-        object.setColor(this.newColor);
+        object.setColor(object.getColor().lerp(this.newColor, 0.5f));
     }
 
     @Override
     public void restore(SpriteObject object) {
         object.setColor(this.oldColor);
+    }
+
+    @Override
+    public boolean stack() {
+        return true;
     }
 }

@@ -106,7 +106,7 @@ public class Demon extends SpriteObject {
         boolean found = false;
 
         for (Effect effect : this.effects) {
-            if (effect.getClass().equals(newEffect.getClass())) {
+            if (effect.getClass().equals(newEffect.getClass()) && !effect.stack()) {
                 effect.refresh();
                 found = true;
                 break;

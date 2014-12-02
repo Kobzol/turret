@@ -30,4 +30,5 @@ public abstract class Effect implements Cloneable {
 
     public abstract void apply(SpriteObject object);
     public abstract void restore(SpriteObject object);
+    public abstract boolean stack();
 }

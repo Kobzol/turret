@@ -24,4 +24,8 @@ public class VelocityEffect extends Effect {
         object.setSpeed(this.old_speed);
     }
 
+    @Override
+    public boolean stack() {
+        return false;
+    }
 }
