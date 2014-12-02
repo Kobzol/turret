@@ -59,6 +59,7 @@ public final class Game {
         assetManager.load(AssetContainer.TURRET2_IMG, Texture.class);
         assetManager.load(AssetContainer.TURRET2_CANON_IMG, Texture.class);
         assetManager.load(AssetContainer.TURRET2_BULLET_IMG, Texture.class);
+        assetManager.load(AssetContainer.TURRET4_LASER_IMG, Texture.class);
 
         assetManager.load(AssetContainer.DEMON1_IMG, Texture.class);
 

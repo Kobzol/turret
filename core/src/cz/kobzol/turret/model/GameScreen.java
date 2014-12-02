@@ -32,7 +32,7 @@ public class GameScreen extends Screen {
 
     private WaveSpawner waveSpawner = new WaveSpawner();
 
-    private Field field = new Field();
+    private Field field;
 
     private List<Demon> demons = new ArrayList<Demon>();
     private List<Demon> flaggedDemons = new ArrayList<Demon>();
@@ -52,6 +52,7 @@ public class GameScreen extends Screen {
     }
 
     private void prepareGUI() {
+        this.field = new FieldFactory(Gdx.files.internal(AssetContainer.FIELD_MAP).readString()).createField();
         this.field.setPosition(new Vector2(0, 0));
 
         this.turretBar = new TurretBar(new TurretBar.TurretBarListener() {

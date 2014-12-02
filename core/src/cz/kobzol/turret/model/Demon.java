@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.model.effect.Effect;
 import cz.kobzol.turret.services.Locator;
+import cz.kobzol.turret.util.Collections;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -19,6 +20,10 @@ import java.util.List;
  * Attacking demon.
  */
 public class Demon extends SpriteObject {
+    private int directions[][] = {
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+    };
+
     protected float max_health;
     protected float health;
 
@@ -144,9 +149,6 @@ public class Demon extends SpriteObject {
 
         Dimension fieldDimension = field.getFieldDimension();
         int slotCount = fieldDimension.width * fieldDimension.height;
-        int directions[][] = {
-                {1, 0}, {-1, 0}, {0, 1}, {0, -1}
-        };
 
         boolean[] visited = new boolean[slotCount];
         int[] predecessors = new int[slotCount];
@@ -223,6 +225,13 @@ public class Demon extends SpriteObject {
         Demon demon = (Demon) super.clone();
         demon.effects = new ArrayList<Effect>();
         demon.effects.addAll(this.effects);
+        demon.directions = new int[this.directions.length][2];
+
+        for (int i = 0; i < this.directions.length; i++) {
+            demon.directions[i] = this.directions[i].clone();
+        }
+
+        Collections.shuffleArray(demon.directions);
 
         return demon;
     }

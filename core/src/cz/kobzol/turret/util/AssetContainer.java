@@ -6,8 +6,10 @@ import com.badlogic.gdx.assets.AssetManager;
  * Contains template objects and assets.
  */
 public class AssetContainer {
-    public static final String OBJECTS_XML = "obj/game_objects.xml";
     public static final String FONT_ARIAL = "font/arial.fnt";
+
+    public static final String OBJECTS_XML = "obj/game_objects.xml";
+    public static final String FIELD_MAP = "obj/field.txt";
 
     public static final String GRASS_IMG = "img/grass.png";
     public static final String PLATFORM_IMG = "img/platform.png";
@@ -19,6 +21,7 @@ public class AssetContainer {
     public static final String TURRET2_IMG = "img/turrets/turret1_body.png";
     public static final String TURRET2_CANON_IMG = "img/turrets/turret2_canon.png";
     public static final String TURRET2_BULLET_IMG = "img/turrets/turret2_bullet.png";
+    public static final String TURRET4_LASER_IMG = "img/turrets/turret4_bullet.png";
 
     public static final String DEMON1_IMG = "img/demons/demon1.png";
 

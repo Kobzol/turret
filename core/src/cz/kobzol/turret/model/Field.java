@@ -22,8 +22,10 @@ import java.util.HashMap;
 public class Field extends SpriteObject implements IClickable {
     private final ClickContainer clickContainer;
 
-    private final Dimension fieldDimension = new Dimension(52, 20);
-    private final Dimension slotDimension = new Dimension(30, 30);
+    private final Dimension fieldDimension;
+    private final Dimension slotDimension;
+    private final Vector2 startIndex;
+    private final Vector2 endIndex;
 
     private Texture slotTexture;
     private Texture platformTexture;
@@ -32,8 +34,13 @@ public class Field extends SpriteObject implements IClickable {
 
     private HashMap<SpriteObject, Vector2> objectPositions = new HashMap<SpriteObject, Vector2>();
 
-    public Field() {
+    public Field(Dimension fieldDimension, Dimension slotDimension, Vector2 startIndex, Vector2 endIndex) {
         this.clickContainer = new ClickContainer(this);
+
+        this.fieldDimension = fieldDimension;
+        this.slotDimension = slotDimension;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
 
         this.slotTexture = Locator.getAssetContainer().getAssetManager().get(AssetContainer.GRASS_IMG);
         this.platformTexture = Locator.getAssetContainer().getAssetManager().get(AssetContainer.PLATFORM_IMG);
@@ -49,12 +56,7 @@ public class Field extends SpriteObject implements IClickable {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 slots[y][x] = new FieldSlot(x, y, y * width + x);
-                slots[y][x].setPlatform(true);
             }
-        }
-
-        for (int i = 0; i < width; i++) {
-            slots[height / 2][i].setPlatform(false);
         }
 
         return slots;
@@ -136,10 +138,10 @@ public class Field extends SpriteObject implements IClickable {
     }
 
     public FieldSlot getStartSlot() {
-        return this.slots[this.fieldDimension.height / 2][0];
+        return this.getSlotForIndex(this.startIndex);
     }
     public FieldSlot getEndSlot() {
-        return this.slots[this.fieldDimension.height / 2][this.fieldDimension.width - 1];
+        return this.getSlotForIndex(this.endIndex);
     }
     public boolean isAtFinish(SpriteObject object) {
         return this.getSlotForObject(object) == this.getEndSlot();
