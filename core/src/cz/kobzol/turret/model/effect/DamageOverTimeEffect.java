@@ -41,7 +41,7 @@ public class DamageOverTimeEffect extends Effect {
     }
 
     @Override
-    public boolean stack() {
-        return false;
+    public boolean stackWith(Effect effect) {
+        return true;
     }
 }

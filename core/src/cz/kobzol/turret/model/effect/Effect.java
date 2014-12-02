@@ -24,11 +24,13 @@ public abstract class Effect implements Cloneable {
         return this.duration.isReady();
     }
 
-    public void refresh() {
-        this.duration.reset();
-    }
-
     public abstract void apply(SpriteObject object);
     public abstract void restore(SpriteObject object);
-    public abstract boolean stack();
+
+    /**
+     * Stacks the current effect with the given effect or does nothing if it shouldn't stack.
+     * @param effect effect
+     * @return True if they stacked, false if not.
+     */
+    public abstract boolean stackWith(Effect effect);
 }

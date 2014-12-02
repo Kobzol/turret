@@ -28,7 +28,7 @@ public class SpriteEffect extends Effect {
     }
 
     @Override
-    public boolean stack() {
-        return true;
+    public boolean stackWith(Effect effect) {
+        return false;
     }
 }

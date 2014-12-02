@@ -25,7 +25,7 @@ public class VelocityEffect extends Effect {
     }
 
     @Override
-    public boolean stack() {
+    public boolean stackWith(Effect effect) {
         return false;
     }
 }

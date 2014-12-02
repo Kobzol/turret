@@ -103,19 +103,13 @@ public class Demon extends SpriteObject {
     }
 
     public void addEffect(Effect newEffect) {
-        boolean found = false;
-
         for (Effect effect : this.effects) {
-            if (effect.getClass().equals(newEffect.getClass()) && !effect.stack()) {
-                effect.refresh();
-                found = true;
-                break;
+            if (effect.stackWith(newEffect)) {
+                return;
             }
         }
 
-        if (!found) {
-            this.effects.add(newEffect);
-        }
+        this.effects.add(newEffect); // the effect was not stacked
     }
 
     private void applyEffects() {
