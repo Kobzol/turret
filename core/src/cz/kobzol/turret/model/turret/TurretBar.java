@@ -38,9 +38,9 @@ public class TurretBar extends SpriteObject {
     }
 
     private void prepareTurretSpawners() {
-        TurretCanon canon = new LaserTurretCanon(200, 50, 100, 300, new LaserTurretCanon.IDamager() {
+        TurretCanon canon = new MissileTurretCanon(200, 50, 100, 300, new MissileTurretCanon.IDamager() {
             @Override
-            public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet) {
+            public void dealDamage(Demon demon, MissileTurretCanon.Bullet bullet) {
                 demon.receiveDamage(bullet.getDamage());
             }
         });
@@ -61,9 +61,9 @@ public class TurretBar extends SpriteObject {
 
         this.spawners.add(turretSpawner);
 
-        canon = new LaserTurretCanon(200, 50, 100, 200, new LaserTurretCanon.IDamager() {
+        canon = new MissileTurretCanon(200, 50, 100, 200, new MissileTurretCanon.IDamager() {
             @Override
-            public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet) {
+            public void dealDamage(Demon demon, MissileTurretCanon.Bullet bullet) {
                 demon.receiveDamage(bullet.getDamage());
                 demon.addEffect(new VelocityEffect(1000, 0.5f));
                 demon.addEffect(new SpriteEffect(1000, new Color(0, 0, 1, 0.5f)));
@@ -86,14 +86,32 @@ public class TurretBar extends SpriteObject {
 
         this.spawners.add(turretSpawner);
 
-        canon = new LaserTurretCanon(200, 50, 500, 200, new LaserTurretCanon.IDamager() {
+        canon = new MissileTurretCanon(200, 50, 500, 200, new MissileTurretCanon.IDamager() {
             @Override
-            public void dealDamage(Demon demon, LaserTurretCanon.Bullet bullet) {
+            public void dealDamage(Demon demon, MissileTurretCanon.Bullet bullet) {
                 demon.receiveDamage(bullet.getDamage());
                 demon.addEffect(new DamageOverTimeEffect(1000, 3, 30));
                 demon.addEffect(new SpriteEffect(1000, new Color(0, 1, 0, 0.8f)));
             }
         });
+        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
+        canon.setDimension(new Dimension(30, 30));
+        canon.setOrigin(15, 8);
+
+        turret = new Turret(canon);
+        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_IMG));
+        turret.setDimension(new Dimension(30, 30));
+
+        turretSpawner = new TurretSpawner(turret, new TurretSpawner.OnClickListener() {
+            @Override
+            public void onClick(TurretSpawner turretSpawner) {
+                TurretBar.this.listener.onTurretSelected(turretSpawner.getTurret());
+            }
+        });
+
+        this.spawners.add(turretSpawner);
+
+        canon = new LaserTurretCanon(200, 50, 100);
         canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
         canon.setDimension(new Dimension(30, 30));
         canon.setOrigin(15, 8);

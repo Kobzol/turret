@@ -13,6 +13,8 @@ public abstract class TurretCanon extends SpriteObject {
     protected float range;
     protected float damage;
 
+    protected Demon target;
+
     protected Cooldown fire_cooldown;
 
     public TurretCanon(float range, float damage, long fire_delay) {
@@ -25,5 +27,19 @@ public abstract class TurretCanon extends SpriteObject {
         super.update(delta);
 
         this.fire_cooldown.update(delta);
+    }
+
+    protected boolean isInRange(Demon demon) {
+        return demon.getPosition().dst(this.getPosition()) <= this.range;
+    }
+
+    protected Demon findTarget(List<Demon> demons) {
+        for (Demon demon : demons) {
+            if (this.isInRange(demon)) {
+                return demon;
+            }
+        }
+
+        return null;
     }
 }
