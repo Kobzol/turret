@@ -24,8 +24,23 @@ public class VelocityEffect extends Effect {
         object.setSpeed(this.old_speed);
     }
 
+    public float getVelocityCoefficient() {
+        return this.velocityCoefficient;
+    }
+
     @Override
     public boolean stackWith(Effect effect) {
-        return false;
+        if (effect instanceof VelocityEffect) {
+            VelocityEffect vel = (VelocityEffect) effect;
+
+            if (vel.getVelocityCoefficient() < this.velocityCoefficient) {  // replaced itself with more slowing effect
+                this.velocityCoefficient = vel.getVelocityCoefficient();
+            }
+
+            this.refresh();
+
+            return true;    // let the effect perish
+        }
+        else return false;
     }
 }

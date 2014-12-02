@@ -24,6 +24,17 @@ public abstract class Effect implements Cloneable {
         return this.duration.isReady();
     }
 
+    public long getDuration() {
+        return this.duration.getDuration();
+    }
+    protected void setDuration(long duration_ms) {
+        this.duration.setDuration(duration_ms);
+    }
+
+    protected void refresh() {
+        this.duration.reset();
+    }
+
     public abstract void apply(SpriteObject object);
     public abstract void restore(SpriteObject object);
 

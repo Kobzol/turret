@@ -61,7 +61,7 @@ public class TurretBar extends SpriteObject {
 
         this.spawners.add(turretSpawner);
 
-        canon = new MissileTurretCanon(200, 50, 100, 200, new MissileTurretCanon.IDamager() {
+        canon = new MissileTurretCanon(200, 50, 500, 200, new MissileTurretCanon.IDamager() {
             @Override
             public void dealDamage(Demon demon, MissileTurretCanon.Bullet bullet) {
                 demon.receiveDamage(bullet.getDamage());

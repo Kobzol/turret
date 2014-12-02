@@ -8,8 +8,8 @@ import cz.kobzol.turret.util.Cooldown;
  * Represents damage over time.
  */
 public class DamageOverTimeEffect extends Effect {
-    private final int ticks;
-    private final float tickDamage;
+    private int ticks;
+    private float tickDamage;
     private final Cooldown tickCooldown;
 
     public DamageOverTimeEffect(long duration_ms, int ticks, float tickDamage) {
@@ -40,8 +40,26 @@ public class DamageOverTimeEffect extends Effect {
         return super.update(delta);
     }
 
+    private float getTotalDamage() {
+        return this.ticks * this.tickDamage;
+    }
+
     @Override
     public boolean stackWith(Effect effect) {
-        return true;
+        if (effect instanceof DamageOverTimeEffect) {
+            DamageOverTimeEffect dot = (DamageOverTimeEffect) effect;
+
+            if (dot.getTotalDamage() > this.getTotalDamage()) {
+                this.tickDamage = dot.tickDamage;
+                this.tickCooldown.setDuration(dot.getDuration() / dot.ticks);
+                this.ticks = dot.ticks;
+                this.setDuration(dot.getDuration());
+
+                return true;
+            }
+
+            return false;
+        }
+        else return false;
     }
 }

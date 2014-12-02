@@ -4,16 +4,16 @@ package cz.kobzol.turret.util;
  * Represents time cooldown in milliseconds.
  */
 public class Cooldown implements Cloneable {
-    private final long interval_ms;
+    private long duration_ms;
     private double elapsed_s;
 
-    public Cooldown(long interval_ms) {
-        this.interval_ms = interval_ms;
+    public Cooldown(long duration_ms) {
+        this.duration_ms = duration_ms;
         this.elapsed_s = 0.0;
     }
 
     public boolean isReady() {
-        return (this.elapsed_s * 1000.0) > this.interval_ms;
+        return (this.elapsed_s * 1000.0) > this.duration_ms;
     }
 
     /**
@@ -32,6 +32,13 @@ public class Cooldown implements Cloneable {
 
     public void reset() {
         this.elapsed_s = 0.0;
+    }
+
+    public long getDuration() {
+        return this.duration_ms;
+    }
+    public void setDuration(long duration_ms) {
+        this.duration_ms = duration_ms;
     }
 
     public void update(float delta) {
