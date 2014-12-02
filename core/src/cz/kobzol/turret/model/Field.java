@@ -3,7 +3,6 @@ package cz.kobzol.turret.model;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
@@ -32,6 +31,8 @@ public class Field extends SpriteObject implements IClickable {
 
     private FieldSlot[][] slots;
 
+    private Rectangle fieldRectangle;
+
     private HashMap<SpriteObject, Vector2> objectPositions = new HashMap<SpriteObject, Vector2>();
 
     public Field(Dimension fieldDimension, Dimension slotDimension, Vector2 startIndex, Vector2 endIndex) {
@@ -48,6 +49,8 @@ public class Field extends SpriteObject implements IClickable {
         this.setDimension(new Dimension(this.fieldDimension.width * this.slotDimension.width, this.fieldDimension.height * this.slotDimension.height));
 
         this.slots = this.preparePlatforms(this.fieldDimension.width, this.fieldDimension.height);
+
+        this.updateFieldRectangle();
     }
 
     private FieldSlot[][] preparePlatforms(int width, int height) {
@@ -84,14 +87,9 @@ public class Field extends SpriteObject implements IClickable {
     }
 
     public boolean containsCoords(Vector2 coords) {
-        int marginX = (int) (this.fieldDimension.getWidth() * this.slotDimension.getWidth());
-        int marginY = (int) (this.fieldDimension.getHeight() * this.slotDimension.getHeight());
-
-        Vector2 anchorPoint = this.getPosition();
-
-        Rectangle rectangle = new Rectangle(anchorPoint.x, anchorPoint.y,marginX,marginY);
-
-        return rectangle.contains(coords) && coords.x < marginX && coords.y < marginY;
+        return this.fieldRectangle.contains(coords) &&
+               coords.x < this.fieldRectangle.x + this.fieldRectangle.width &&
+               coords.y < this.fieldRectangle.y + this.fieldRectangle.height;
     }
     public boolean containsIndex(int x, int y) {
         return  x >= 0 && x < this.fieldDimension.width &&
@@ -130,9 +128,7 @@ public class Field extends SpriteObject implements IClickable {
         }
         else return null;
     }
-    public FieldSlot[][] getSlots() {
-        return this.slots;
-    }
+
     public Dimension getFieldDimension() {
         return this.fieldDimension;
     }
@@ -143,8 +139,14 @@ public class Field extends SpriteObject implements IClickable {
     public FieldSlot getEndSlot() {
         return this.getSlotForIndex(this.endIndex);
     }
-    public boolean isAtFinish(SpriteObject object) {
-        return this.getSlotForObject(object) == this.getEndSlot();
+
+    private void updateFieldRectangle() {
+        int marginX = (int) (this.fieldDimension.getWidth() * this.slotDimension.getWidth());
+        int marginY = (int) (this.fieldDimension.getHeight() * this.slotDimension.getHeight());
+
+        Vector2 anchorPoint = this.getPosition();
+
+        this.fieldRectangle = new Rectangle(anchorPoint.x, anchorPoint.y, marginX, marginY);
     }
 
     @Override
@@ -166,18 +168,8 @@ public class Field extends SpriteObject implements IClickable {
     }
 
     @Override
-    public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
-
-    }
-
-    @Override
     public Rectangle getBoundingBox() {
         return new Rectangle(this.getPosition().x, this.getPosition().y, this.getDimension().width, this.getDimension().height);
-    }
-
-    @Override
-    public void update(float delta) {
-
     }
 
     @Override
@@ -209,5 +201,12 @@ public class Field extends SpriteObject implements IClickable {
                 }
             }
         }
+    }
+
+    @Override
+    public void setPosition(Vector2 position) {
+        super.setPosition(position);
+
+        this.updateFieldRectangle();
     }
 }

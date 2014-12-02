@@ -49,6 +49,8 @@ public class GameScreen extends Screen {
 
         this.prepareGUI();
         this.prepareWaves();
+
+        this.startWave();
     }
 
     private void prepareGUI() {
@@ -148,12 +150,14 @@ public class GameScreen extends Screen {
         this.flaggedDemons.add(demon);
     }
     private void removeFlaggedDemons() {
-        boolean removed = this.flaggedDemons.size() > 0;
+        if (this.flaggedDemons.size() > 0) {
+            boolean removed = this.flaggedDemons.size() > 0;
 
-        this.demons.removeAll(this.flaggedDemons);
+            this.demons.removeAll(this.flaggedDemons);
 
-        if (removed && !this.buildState.isBuilding() && this.demons.size() == 0) {
-            this.stopWave();
+            if (removed && !this.buildState.isBuilding() && this.demons.size() == 0) {
+                this.stopWave();
+            }
         }
     }
 
@@ -166,12 +170,12 @@ public class GameScreen extends Screen {
         this.startWaveButton.render(batch, camera);
         this.field.render(batch, camera);
 
-        for (Demon demon : this.demons) {
-            demon.render(batch, camera);
-        }
-
         for (Turret turret : this.turrets) {
             turret.render(batch, camera);
+        }
+
+        for (Demon demon : this.demons) {
+            demon.render(batch, camera);
         }
 
         if (this.selectedTurret != null) {
@@ -199,8 +203,6 @@ public class GameScreen extends Screen {
         this.removeFlaggedDemons();
 
         this.waveSpawner.update(delta);
-        this.turretBar.update(delta);
-        this.field.update(delta);
 
         for (Demon demon : this.demons) {
             demon.update(this, delta);

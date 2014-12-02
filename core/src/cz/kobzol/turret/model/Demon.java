@@ -8,32 +8,28 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.model.effect.Effect;
 import cz.kobzol.turret.services.Locator;
-import cz.kobzol.turret.util.Collections;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Attacking demon.
  */
 public class Demon extends SpriteObject {
-    private int directions[][] = {
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
-    };
-
     protected float max_health;
     protected float health;
 
-    private FieldSlot target;
+    private PathFinder pathFinder;
 
     private List<Effect> effects = new ArrayList<Effect>();
 
     public Demon(float max_health, float speed) {
         this.health = this.max_health = max_health;
         this.setSpeed(speed);
+
+        this.pathFinder = new PathFinder();
     }
 
     @Override
@@ -81,11 +77,15 @@ public class Demon extends SpriteObject {
         FieldSlot current = field.getSlotForObject(this);
 
         if (current != null) { // wait for field to register this object
-            if (this.target == null) {
-                this.target = this.findTarget(field);
+            if (!this.pathFinder.isPathValid()) {
+                List<FieldSlot> path = this.pathFinder.findPath(field);
+
+                assert(path != null);
+
+                this.pathFinder.setPath(path);
             }
 
-            Vector2 slotCoords = field.getSlotCoordinates(this.target);
+            Vector2 slotCoords = field.getSlotCoordinates(this.pathFinder.getNextTarget());
             Vector2 direction = slotCoords.cpy().sub(this.getPosition()).nor();
 
             this.setMoveDirection(direction);
@@ -95,7 +95,7 @@ public class Demon extends SpriteObject {
                 if (current == field.getEndSlot()) {
                     this.notifyFinished(gameScreen);
                 }
-                else this.target = null; // find new target
+                else this.pathFinder.advanceInPath();
             }
         }
 
@@ -143,71 +143,6 @@ public class Demon extends SpriteObject {
         gameScreen.notifyDemonFinished(this);
     }
 
-    private FieldSlot findTarget(Field field) {
-        FieldSlot end = field.getEndSlot();
-        FieldSlot current = field.getSlotForObject(this);
-
-        Dimension fieldDimension = field.getFieldDimension();
-        int slotCount = fieldDimension.width * fieldDimension.height;
-
-        boolean[] visited = new boolean[slotCount];
-        int[] predecessors = new int[slotCount];
-        int[] distances = new int[slotCount];
-
-        for (int i = 0; i < distances.length; i++) {
-            distances[i] = Integer.MAX_VALUE;
-        }
-
-        distances[current.getIndex()] = 0;
-
-        LinkedList<FieldSlot> queue = new LinkedList<FieldSlot>();
-        queue.add(current);
-
-        while (queue.size() > 0) {
-            FieldSlot slot = queue.poll();
-
-            visited[slot.getIndex()] = true;
-
-            for (int[] shift : directions) {
-                int newX = (int) slot.getPosition().x + shift[0];
-                int newY = (int) slot.getPosition().y + shift[1];
-
-                if (field.containsIndex(newX, newY)) {
-                    Vector2 index = new Vector2(newX, newY);
-                    FieldSlot incident = field.getSlotForIndex(index);
-
-                    if (!visited[incident.getIndex()] && !incident.isPlatform()) {
-                        visited[incident.getIndex()] = true;
-                        predecessors[incident.getIndex()] = slot.getIndex();
-                        distances[incident.getIndex()] = distances[slot.getIndex()] + 1;
-
-                        if (incident == end) {
-                            break;
-                        }
-                        else queue.add(incident);
-                    }
-                }
-            }
-        }
-
-        assert(distances[end.getIndex()] < Integer.MAX_VALUE); // the path to the end was found
-
-        int lastTarget = end.getIndex();
-        int target = lastTarget;
-        while (true) {
-            if (field.getSlotForIndex(target) == current) {
-                target = lastTarget;
-                break;
-            }
-            else {
-                lastTarget = target;
-                target = predecessors[target];
-            }
-        }
-
-        return field.getSlotForIndex(target);
-    }
-
     public void receiveDamage(float damage) {
         this.health -= damage;
 
@@ -225,13 +160,7 @@ public class Demon extends SpriteObject {
         Demon demon = (Demon) super.clone();
         demon.effects = new ArrayList<Effect>();
         demon.effects.addAll(this.effects);
-        demon.directions = new int[this.directions.length][2];
-
-        for (int i = 0; i < this.directions.length; i++) {
-            demon.directions[i] = this.directions[i].clone();
-        }
-
-        Collections.shuffleArray(demon.directions);
+        demon.pathFinder = new PathFinder();
 
         return demon;
     }
