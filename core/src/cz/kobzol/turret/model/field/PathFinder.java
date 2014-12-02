@@ -1,4 +1,4 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.model.field;
 
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.util.Collections;
@@ -92,7 +92,7 @@ public class PathFinder {
         Collections.shuffleArray(this.directions);
     }
 
-    boolean isPathValid() {
+    public boolean isPathValid() {
         if (this.waypoints.size() == 0) { // the path hasn't been found yet
             return false;
         }

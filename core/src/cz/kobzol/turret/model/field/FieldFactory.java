@@ -1,4 +1,4 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.model.field;
 
 import com.badlogic.gdx.math.Vector2;
 
