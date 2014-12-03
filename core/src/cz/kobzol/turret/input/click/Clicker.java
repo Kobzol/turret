@@ -21,7 +21,7 @@ public class Clicker {
         else {
             if (boundingBox.contains(mouseState.getMousePosition())) {
                 if (container.getClickState().equals(ClickContainer.ClickState.MOUSE_HOLD) && clickableObject.isClickable()) {
-                    container.performClick();
+                    container.performClick(mouseState);
                 }
                 else if (container.getClickState().equals(ClickContainer.ClickState.WAITING)) {
                     container.setReadyToClick();

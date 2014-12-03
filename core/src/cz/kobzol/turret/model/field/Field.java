@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.ClickContainer;
 import cz.kobzol.turret.input.click.IClickable;
+import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.model.screen.GameScreen;
 import cz.kobzol.turret.model.turret.Turret;
 import cz.kobzol.turret.services.Locator;
@@ -206,7 +207,7 @@ public class Field extends SpriteObject implements IClickable {
     }
 
     @Override
-    public void onClick() {
+    public void onClick(MouseState mouseState) {
         GameScreen scr = (GameScreen) Locator.getGame().getActiveScreen();
 
         if (scr.getSelectedTurret() != null) {

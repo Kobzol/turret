@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.ClickContainer;
 import cz.kobzol.turret.input.click.IClickable;
+import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
 
@@ -59,7 +60,7 @@ public class Button extends SpriteObject implements IClickable {
     }
 
     @Override
-    public void onClick() {
+    public void onClick(MouseState mouseState) {
         this.listener.onClick();
     }
 

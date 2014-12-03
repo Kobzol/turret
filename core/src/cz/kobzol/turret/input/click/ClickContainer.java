@@ -1,5 +1,7 @@
 package cz.kobzol.turret.input.click;
 
+import cz.kobzol.turret.input.mouse.MouseState;
+
 /**
  * Represents the draggable state of an object.
  */
@@ -18,8 +20,8 @@ public class ClickContainer {
         this.clickState = ClickState.WAITING;
     }
 
-    public void performClick() {
-        this.clickableObject.onClick();
+    public void performClick(MouseState mouseState) {
+        this.clickableObject.onClick(mouseState);
         this.setReadyToClick();
     }
 
