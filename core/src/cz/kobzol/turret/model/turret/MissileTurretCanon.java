@@ -151,10 +151,10 @@ public class MissileTurretCanon extends TurretCanon {
                 this.state = TurretState.SHOOTING;
             }
             else {
-                this.rotate(canon_rotation);
+                this.rotate(canon_rotation);    // try to rotate in one direction
                 double new_difference = Math.abs(angle - this.getRotation());
 
-                if (new_difference > difference) {
+                if (new_difference > difference) {  // if it made the situation worse, turn back and to the other direction
                     this.rotate(-2 * canon_rotation);
                 }
             }

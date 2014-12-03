@@ -29,6 +29,10 @@ public abstract class TurretCanon extends SpriteObject {
         this.fire_cooldown.update(delta);
     }
 
+    public float getRange() {
+        return this.range;
+    }
+
     protected boolean isInRange(Demon demon) {
         return demon.getPosition().dst(this.getPosition()) <= this.range;
     }

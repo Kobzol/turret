@@ -15,6 +15,8 @@ public class FieldSlot {
 
     private boolean platform = false;
 
+    private int cost = 1;
+
     private final List<SpriteObject> objects = new ArrayList<SpriteObject>();
 
     public FieldSlot(int x, int y, int index) {
@@ -50,5 +52,12 @@ public class FieldSlot {
     }
     public boolean containsObject(SpriteObject object) {
         return this.objects.contains(object);
+    }
+
+    public int getCost() {
+        return this.cost;
+    }
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 }

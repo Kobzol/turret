@@ -36,6 +36,8 @@ public class Field extends SpriteObject implements IClickable {
 
     private HashMap<SpriteObject, Vector2> objectPositions = new HashMap<SpriteObject, Vector2>();
 
+    private int turretCount = 0;
+
     public Field(Dimension fieldDimension, Dimension slotDimension, Vector2 startIndex, Vector2 endIndex) {
         this.clickContainer = new ClickContainer(this);
 
@@ -141,6 +143,10 @@ public class Field extends SpriteObject implements IClickable {
         return this.getSlotForIndex(this.endIndex);
     }
 
+    public int getTurretCount() {
+        return this.turretCount;
+    }
+
     private void updateFieldRectangle() {
         int marginX = (int) (this.fieldDimension.getWidth() * this.slotDimension.getWidth());
         int marginY = (int) (this.fieldDimension.getHeight() * this.slotDimension.getHeight());
@@ -148,6 +154,22 @@ public class Field extends SpriteObject implements IClickable {
         Vector2 anchorPoint = this.getPosition();
 
         this.fieldRectangle = new Rectangle(anchorPoint.x, anchorPoint.y, marginX, marginY);
+    }
+
+    /**
+     * Recalculates the costs from the given turret.
+     * @param turret last inserted turret
+     */
+    private void recalculateCosts(Turret turret) {
+        for (int y = 0; y < this.fieldDimension.height; y++) {
+            for (int x = 0; x < this.fieldDimension.width; x++) {
+                FieldSlot slot = this.getSlotForIndex(y * this.fieldDimension.width + x);
+
+                if (this.getSlotCoordinates(slot).dst(turret.getPosition()) <= turret.getRange()) {
+                    slot.setCost(slot.getCost() + 1);
+                }
+            }
+        }
     }
 
     @Override
@@ -199,6 +221,9 @@ public class Field extends SpriteObject implements IClickable {
                     Vector2 coords = this.getSlotCoordinates(this.getSlotForIndex(index));
 
                     turret.setPosition(coords);
+
+                    this.turretCount++;
+                    this.recalculateCosts(turret);
                 }
             }
         }

@@ -81,7 +81,7 @@ public class Demon extends SpriteObject {
         FieldSlot current = field.getSlotForObject(this);
 
         if (current != null) { // wait for field to register this object
-            if (!this.pathFinder.isPathValid()) {
+            if (!this.pathFinder.isPathValid(field)) {
                 List<FieldSlot> path = this.pathFinder.findPath(field);
 
                 assert(path != null);

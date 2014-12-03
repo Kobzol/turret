@@ -35,6 +35,10 @@ public class Turret extends SpriteObject {
         this.canon.handleDemons(demons, delta);
     }
 
+    public float getRange() {
+        return this.canon.getRange();
+    }
+
     @Override
     public void render(Batch batch, Camera camera) {
         super.render(batch, camera);

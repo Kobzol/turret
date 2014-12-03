@@ -74,7 +74,7 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     }
 
     public void setColor(Color color) {
-        this.color = new Color(color);
+        this.color.set(color);
     }
     public Color getColor() {
         return new Color(this.color);
