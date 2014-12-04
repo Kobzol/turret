@@ -15,7 +15,7 @@ import java.awt.Dimension;
  * Class for creating turret types.
  */
 public class TurretFactory {
-    private static int TURRET_SIZE = TurretFactory.TURRET_SIZE;
+    private static int TURRET_SIZE = 30;
 
     public Turret createBulletTurret() {
         TurretCanon canon = new MissileTurretCanon(200, 50, 100, 300, new MissileTurretCanon.IDamager() {

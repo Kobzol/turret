@@ -42,7 +42,7 @@ public class TurretBar extends SpriteObject {
         });
         this.spawners.add(turretSpawner);
 
-        turretSpawner = new TurretSpawner(factory.createLaserTurret(), new TurretSpawner.OnClickListener() {
+        turretSpawner = new TurretSpawner(factory.createFreezeTurret(), new TurretSpawner.OnClickListener() {
             @Override
             public void onClick(TurretSpawner turretSpawner) {
                 TurretBar.this.listener.onTurretSelected(turretSpawner.getTurret());

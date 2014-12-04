@@ -38,6 +38,9 @@ public class Turret extends SpriteObject {
     public float getRange() {
         return this.canon.getRange();
     }
+    public TurretCanon getCanon() {
+        return this.canon;
+    }
 
     @Override
     public void render(Batch batch, Camera camera) {
