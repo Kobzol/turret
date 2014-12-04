@@ -56,8 +56,6 @@ public class GameScreen extends Screen {
 
         this.prepareGUI();
         this.prepareWaves();
-
-        this.startWave();
     }
 
     private void prepareGUI() {
@@ -88,7 +86,7 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(500, 100.0f);
+        Demon demon = new Demon(2500, 100.0f);
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
         wave1.addSpawnee(demon, 5);

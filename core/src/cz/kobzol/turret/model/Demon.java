@@ -49,6 +49,10 @@ public class Demon extends SpriteObject {
     public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
         super.renderShape(shapeRenderer, camera);
 
+        if (this.health == this.max_health) {   // draw health only if the demon is damaged
+            return;
+        }
+
         Vector2 position = this.getPosition();
         Dimension dimension = this.getDimension();
 

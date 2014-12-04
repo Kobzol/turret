@@ -167,7 +167,7 @@ public class Field extends SpriteObject implements IClickable {
                 FieldSlot slot = this.getSlotForIndex(y * this.fieldDimension.width + x);
 
                 if (this.getSlotCoordinates(slot).dst(turret.getPosition()) <= turret.getRange()) {
-                    slot.setCost(slot.getCost() + 1);
+                    slot.setCost(slot.getCost() + 10); // TODO set turret's real cost
                 }
             }
         }
