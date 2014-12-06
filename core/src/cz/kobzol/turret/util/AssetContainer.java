@@ -18,9 +18,16 @@ public class AssetContainer {
     public static final String TURRET1_IMG = "img/turrets/turret1_body.png";
     public static final String TURRET1_CANON_IMG = "img/turrets/turret1_canon.png";
     public static final String TURRET1_BULLET_IMG = "img/turrets/turret1_bullet.png";
+
     public static final String TURRET2_IMG = "img/turrets/turret1_body.png";
     public static final String TURRET2_CANON_IMG = "img/turrets/turret2_canon.png";
     public static final String TURRET2_BULLET_IMG = "img/turrets/turret2_bullet.png";
+
+    public static final String TURRET3_IMG = "img/turrets/turret1_body.png";
+    public static final String TURRET3_CANON_IMG = "img/turrets/turret3_canon.png";
+
+    public static final String TURRET4_IMG = "img/turrets/turret1_body.png";
+    public static final String TURRET4_CANON_IMG = "img/turrets/turret4_canon.png";
     public static final String TURRET4_LASER_IMG = "img/turrets/turret4_bullet.png";
 
     public static final String DEMON1_IMG = "img/demons/demon1.png";

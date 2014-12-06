@@ -64,12 +64,12 @@ public class TurretFactory {
                 demon.addEffect(new SpriteEffect(1000, new Color(0, 1, 0, 0.8f)));
             }
         });
-        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
+        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET3_CANON_IMG));
         canon.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
         canon.setOrigin(15, 8);
 
         Turret turret = new Turret(canon);
-        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_IMG));
+        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET3_IMG));
         turret.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
 
         return turret;
@@ -77,12 +77,12 @@ public class TurretFactory {
 
     public Turret createLaserTurret() {
         TurretCanon canon = new LaserTurretCanon(200, 50, 100);
-        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_CANON_IMG));
+        canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET4_CANON_IMG));
         canon.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
         canon.setOrigin(15, 8);
 
         Turret turret = new Turret(canon);
-        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_IMG));
+        turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET4_IMG));
         turret.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
 
         return turret;
