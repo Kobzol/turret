@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
-import cz.kobzol.turret.model.Demon;
+import cz.kobzol.turret.model.demon.Demon;
 import cz.kobzol.turret.model.screen.GameScreen;
 import cz.kobzol.turret.services.Locator;
 

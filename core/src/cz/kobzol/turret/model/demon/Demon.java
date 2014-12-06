@@ -1,4 +1,4 @@
-package cz.kobzol.turret.model;
+package cz.kobzol.turret.model.demon;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -7,9 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.model.effect.Effect;
-import cz.kobzol.turret.model.field.Field;
-import cz.kobzol.turret.model.field.FieldSlot;
-import cz.kobzol.turret.model.field.PathFinder;
 import cz.kobzol.turret.model.screen.GameScreen;
 import cz.kobzol.turret.services.Locator;
 
@@ -25,15 +22,15 @@ public class Demon extends SpriteObject {
     protected float max_health;
     protected float health;
 
-    private PathFinder pathFinder;
+    private DemonBehavior demonBehavior;
 
     private List<Effect> effects = new ArrayList<Effect>();
 
-    public Demon(float max_health, float speed) {
+    public Demon(float max_health, float speed, DemonBehavior demonBehavior) {
         this.health = this.max_health = max_health;
         this.setSpeed(speed);
 
-        this.pathFinder = new PathFinder();
+        this.demonBehavior = demonBehavior;
     }
 
     @Override
@@ -80,32 +77,7 @@ public class Demon extends SpriteObject {
 
         this.applyEffects();
 
-        Field field = gameScreen.getField();
-
-        FieldSlot current = field.getSlotForObject(this);
-
-        if (current != null) { // wait for field to register this object
-            if (!this.pathFinder.isPathValid(field)) {
-                List<FieldSlot> path = this.pathFinder.findPath(field);
-
-                assert(path != null);
-
-                this.pathFinder.setPath(path);
-            }
-
-            Vector2 slotCoords = field.getSlotCoordinates(this.pathFinder.getNextTarget());
-            Vector2 direction = slotCoords.cpy().sub(this.getPosition()).nor();
-
-            this.setMoveDirection(direction);
-            this.move(delta);
-
-            if (slotCoords.dst(this.getPosition()) <= delta * this.speed) {
-                if (current == field.getEndSlot()) {
-                    this.notifyFinished(gameScreen);
-                }
-                else this.pathFinder.advanceInPath();
-            }
-        }
+        this.demonBehavior.update(gameScreen, this, delta);
 
         this.restoreEffects();
     }
@@ -141,7 +113,7 @@ public class Demon extends SpriteObject {
         }
     }
 
-    private void notifyFinished(GameScreen gameScreen) {
+    public void notifyFinished(GameScreen gameScreen) {
         gameScreen.notifyDemonFinished(this);
     }
 
@@ -153,7 +125,7 @@ public class Demon extends SpriteObject {
         }
     }
 
-    private void notifyDeath() {
+    public void notifyDeath() {
         ((GameScreen) Locator.getGame().getActiveScreen()).notifyDemonDied(this);
     }
 
@@ -162,7 +134,7 @@ public class Demon extends SpriteObject {
         Demon demon = (Demon) super.clone();
         demon.effects = new ArrayList<Effect>();
         demon.effects.addAll(this.effects);
-        demon.pathFinder = new PathFinder();
+        demon.demonBehavior = (DemonBehavior) this.demonBehavior.clone();
 
         return demon;
     }

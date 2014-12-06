@@ -2,7 +2,7 @@ package cz.kobzol.turret.model.turret;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import cz.kobzol.turret.model.Demon;
+import cz.kobzol.turret.model.demon.Demon;
 import cz.kobzol.turret.model.effect.DamageOverTimeEffect;
 import cz.kobzol.turret.model.effect.SpriteEffect;
 import cz.kobzol.turret.model.effect.VelocityEffect;

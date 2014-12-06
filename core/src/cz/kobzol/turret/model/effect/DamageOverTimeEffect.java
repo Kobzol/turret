@@ -1,7 +1,7 @@
 package cz.kobzol.turret.model.effect;
 
 import cz.kobzol.turret.graphics.SpriteObject;
-import cz.kobzol.turret.model.Demon;
+import cz.kobzol.turret.model.demon.Demon;
 import cz.kobzol.turret.util.Cooldown;
 
 /**

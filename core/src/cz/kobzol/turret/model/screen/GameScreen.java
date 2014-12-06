@@ -12,10 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.input.click.Clicker;
 import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.model.Button;
-import cz.kobzol.turret.model.Demon;
 import cz.kobzol.turret.model.GameObject;
 import cz.kobzol.turret.model.Wave;
 import cz.kobzol.turret.model.WaveSpawner;
+import cz.kobzol.turret.model.demon.Demon;
+import cz.kobzol.turret.model.demon.FindTargetBehavior;
 import cz.kobzol.turret.model.field.Field;
 import cz.kobzol.turret.model.field.FieldFactory;
 import cz.kobzol.turret.model.turret.Turret;
@@ -86,7 +87,7 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(2500, 100.0f);
+        Demon demon = new Demon(2500, 100.0f, new FindTargetBehavior());
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
         wave1.addSpawnee(demon, 5);
