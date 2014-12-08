@@ -173,6 +173,14 @@ public class Field extends SpriteObject implements IClickable {
         }
     }
 
+    public void resetCosts() {
+        for (int y = 0; y < this.getFieldDimension().height; y++) {
+            for (int x = 0; x < this.getFieldDimension().width; x++) {
+                slots[y][x].setCost(1);
+            }
+        }
+    }
+
     @Override
     public void render(Batch batch, Camera camera) {
         Vector2 anchorPoint = this.getPosition();

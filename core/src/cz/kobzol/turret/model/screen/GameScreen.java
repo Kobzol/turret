@@ -18,7 +18,7 @@ import cz.kobzol.turret.model.WaveSpawner;
 import cz.kobzol.turret.model.demon.Demon;
 import cz.kobzol.turret.model.demon.FindTargetBehavior;
 import cz.kobzol.turret.model.field.Field;
-import cz.kobzol.turret.model.field.FieldFactory;
+import cz.kobzol.turret.model.field.MazeFieldFactory;
 import cz.kobzol.turret.model.turret.Turret;
 import cz.kobzol.turret.model.turret.TurretBar;
 import cz.kobzol.turret.services.Locator;
@@ -60,7 +60,7 @@ public class GameScreen extends Screen {
     }
 
     private void prepareGUI() {
-        this.field = new FieldFactory(Gdx.files.internal(AssetContainer.FIELD_MAP).readString()).createField();
+        this.field = new MazeFieldFactory(new Dimension(20, 10), new Dimension(30, 30), new Vector2(0, 0), new Vector2(19, 9)).createMaze();
         this.field.setPosition(new Vector2(0, 0));
 
         this.turretBar = new TurretBar(new TurretBar.TurretBarListener() {
