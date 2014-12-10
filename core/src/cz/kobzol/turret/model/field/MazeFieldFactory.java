@@ -122,7 +122,7 @@ public class MazeFieldFactory {
         // make more random ways
         for (int y = 0; y < field.getFieldDimension().height; y++) {
             for (int x = (y % 2 == 0 ? 1 : 0); x < field.getFieldDimension().width; x++) {
-                if (random.nextFloat() < 0.05f) {
+                if (random.nextFloat() < 0.1f) {
                     field.getSlotForIndex(new Vector2(x, y)).setPlatform(false);
                 }
             }

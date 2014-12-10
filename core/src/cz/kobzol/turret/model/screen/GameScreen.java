@@ -23,6 +23,7 @@ import cz.kobzol.turret.model.turret.Turret;
 import cz.kobzol.turret.model.turret.TurretBar;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
+import cz.kobzol.turret.util.ObservingList;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -42,8 +43,7 @@ public class GameScreen extends Screen {
 
     private Field field;
 
-    private List<Demon> demons = new ArrayList<Demon>();
-    private List<Demon> flaggedDemons = new ArrayList<Demon>();
+    private ObservingList<Demon> demons = new ObservingList<Demon>();
 
     private List<Turret> turrets = new ArrayList<Turret>();
     private TurretBar turretBar;
@@ -87,7 +87,7 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(2500, 100.0f, new FindTargetBehavior());
+        Demon demon = new Demon(2500, 1000.0f, new FindTargetBehavior());
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
         wave1.addSpawnee(demon, 5);
@@ -146,24 +146,15 @@ public class GameScreen extends Screen {
     }
 
     public void notifyDemonDied(Demon demon) {
-        this.flagDemonDeath(demon);
+
     }
     public void notifyDemonFinished(Demon demon) {
-        this.flagDemonDeath(demon);
+
     }
 
-    private void flagDemonDeath(Demon demon) {
-        this.flaggedDemons.add(demon);
-    }
-    private void removeFlaggedDemons() {
-        if (this.flaggedDemons.size() > 0) {
-            boolean removed = this.flaggedDemons.size() > 0;
-
-            this.demons.removeAll(this.flaggedDemons);
-
-            if (removed && !this.buildState.isBuilding() && this.demons.size() == 0) {
-                this.stopWave();
-            }
+    private void checkWaveEnd() {
+        if (!this.buildState.isBuilding() && this.demons.size() == 0) {
+            this.stopWave();
         }
     }
 
@@ -206,7 +197,8 @@ public class GameScreen extends Screen {
 
     @Override
     public void update(float delta) {
-        this.removeFlaggedDemons();
+        this.demons.deleteFlaggedObjects();
+        this.checkWaveEnd();
 
         this.waveSpawner.update(delta);
 

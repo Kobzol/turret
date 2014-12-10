@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.model.effect.Effect;
 import cz.kobzol.turret.model.screen.GameScreen;
-import cz.kobzol.turret.services.Locator;
+import cz.kobzol.turret.util.Observable;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -18,7 +18,9 @@ import java.util.List;
 /**
  * Attacking demon.
  */
-public class Demon extends SpriteObject {
+public class Demon extends SpriteObject implements Observable {
+    private List<ObservableListener> listeners = new ArrayList<ObservableListener>();
+
     protected float max_health;
     protected float health;
 
@@ -73,6 +75,10 @@ public class Demon extends SpriteObject {
     public void update(GameScreen gameScreen, float delta) {
         super.update(delta);
 
+        if (this.health <= 0.0f) {
+            this.notifyDeath(gameScreen);
+        }
+
         this.updateEffects(delta);
 
         this.applyEffects();
@@ -115,18 +121,15 @@ public class Demon extends SpriteObject {
 
     public void notifyFinished(GameScreen gameScreen) {
         gameScreen.notifyDemonFinished(this);
+        this.notifyRemove();
+    }
+    public void notifyDeath(GameScreen gameScreen) {
+        gameScreen.notifyDemonDied(this);
+        this.notifyRemove();
     }
 
     public void receiveDamage(float damage) {
         this.health -= damage;
-
-        if (this.health <= 0.0f) {
-            this.notifyDeath();
-        }
-    }
-
-    public void notifyDeath() {
-        ((GameScreen) Locator.getGame().getActiveScreen()).notifyDemonDied(this);
     }
 
     @Override
@@ -137,5 +140,16 @@ public class Demon extends SpriteObject {
         demon.demonBehavior = (DemonBehavior) this.demonBehavior.clone();
 
         return demon;
+    }
+
+    private void notifyRemove() {
+        for (ObservableListener listener : this.listeners) {
+            listener.onRemove(this);
+        }
+    }
+
+    @Override
+    public void addListener(ObservableListener listener) {
+        this.listeners.add(listener);
     }
 }

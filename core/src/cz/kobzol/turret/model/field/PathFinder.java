@@ -209,7 +209,10 @@ public class PathFinder {
     }
 
     public FieldSlot getNextTarget() {
-        return this.waypoints.get(this.waypointID + 1);
+        if (this.waypointID + 1 < this.waypoints.size()) {
+            return this.waypoints.get(this.waypointID + 1);
+        }
+        else return this.waypoints.get(this.waypoints.size() - 1);
     }
     public void advanceInPath() {
         this.waypointID++;
