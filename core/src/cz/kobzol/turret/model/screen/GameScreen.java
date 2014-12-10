@@ -89,10 +89,10 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(2500, 100.0f, new FindTargetBehavior());
+        Demon demon = new Demon(2500, 1000.0f, new FindTargetBehavior());
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
-        wave1.addSpawnee(demon, 5);
+        wave1.addSpawnee(demon, 2);
 
         this.waveSpawner.addWave(wave1);
 
@@ -162,7 +162,8 @@ public class GameScreen extends Screen {
 
     @Override
     public void render(Batch batch, Camera camera) {
-        Gdx.gl20.glClearColor(255, 255, 255, 255);
+        Color color = batch.getColor();
+        Gdx.gl20.glClearColor(color.r * 255, color.b * 255, color.g * 255, color.a * 255);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         this.turretBar.render(batch, camera);

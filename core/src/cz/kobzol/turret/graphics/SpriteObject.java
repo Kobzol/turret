@@ -175,6 +175,7 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
         this.setDimension(originalDimension);
 
         obj.setOrigin((int) origin.x, (int) origin.y);
+        obj.color = this.getColor();
 
         return obj;
     }

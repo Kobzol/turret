@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Represents visual effects.
  */
-public class VisualEffect implements IUpdatable, IDrawable, IObservable {
+public abstract class VisualEffect implements IUpdatable, IDrawable, IObservable {
     private List<ObservableListener> listeners = new ArrayList<ObservableListener>();
     private final Cooldown cooldown;
 
@@ -43,11 +43,16 @@ public class VisualEffect implements IUpdatable, IDrawable, IObservable {
         }
     }
 
+    protected void resetEffect() {
+
+    }
+
     @Override
     public void update(float delta) {
         this.cooldown.update(delta);
 
         if (this.cooldown.isReady()) {
+            this.resetEffect();
             this.notifyRemove();
         }
     }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
- * Represents visual effect.
+ * Shakes the screen.
  */
 public class ShakeScreenEffect extends VisualEffect {
     private int counter = 2;
