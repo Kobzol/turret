@@ -3,9 +3,9 @@ package cz.kobzol.turret.util;
 /**
  * Observable objects.
  */
-public interface Observable {
+public interface IObservable {
     public static interface ObservableListener {
-        void onRemove(Observable observable);
+        void onRemove(IObservable observable);
     }
 
     void addListener(ObservableListener listener);

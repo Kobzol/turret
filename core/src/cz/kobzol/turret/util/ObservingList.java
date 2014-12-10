@@ -6,15 +6,15 @@ import java.util.List;
 /**
  * List that observes it's containing items's deletion.
  */
-public class ObservingList<T extends Observable> extends ArrayList<T> {
-    private List<Observable> flaggedObjects = new ArrayList<Observable>();
-    private List<Observable.ObservableListener> listeners = new ArrayList<Observable.ObservableListener>();
+public class ObservingList<T extends IObservable> extends ArrayList<T> {
+    private List<IObservable> flaggedObjects = new ArrayList<IObservable>();
+    private List<IObservable.ObservableListener> listeners = new ArrayList<IObservable.ObservableListener>();
 
     @Override
     public boolean add(T t) {
-        t.addListener(new Observable.ObservableListener() {
+        t.addListener(new IObservable.ObservableListener() {
             @Override
-            public void onRemove(Observable observable) {
+            public void onRemove(IObservable observable) {
                 flaggedObjects.add(observable);
                 notifyObjectRemoved(observable);
             }
@@ -30,13 +30,13 @@ public class ObservingList<T extends Observable> extends ArrayList<T> {
         }
     }
 
-    private void notifyObjectRemoved(Observable observable) {
-        for (Observable.ObservableListener listener : this.listeners) {
+    private void notifyObjectRemoved(IObservable observable) {
+        for (IObservable.ObservableListener listener : this.listeners) {
             listener.onRemove(observable);
         }
     }
 
-    public void addListener(Observable.ObservableListener listener) {
+    public void addListener(IObservable.ObservableListener listener) {
         this.listeners.add(listener);
     }
 }

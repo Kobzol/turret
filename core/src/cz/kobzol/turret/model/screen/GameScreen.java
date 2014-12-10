@@ -21,6 +21,8 @@ import cz.kobzol.turret.model.field.Field;
 import cz.kobzol.turret.model.field.MazeFieldFactory;
 import cz.kobzol.turret.model.turret.Turret;
 import cz.kobzol.turret.model.turret.TurretBar;
+import cz.kobzol.turret.model.visual.ShakeScreenEffect;
+import cz.kobzol.turret.model.visual.VisualEffect;
 import cz.kobzol.turret.services.Locator;
 import cz.kobzol.turret.util.AssetContainer;
 import cz.kobzol.turret.util.ObservingList;
@@ -40,7 +42,6 @@ public class GameScreen extends Screen {
     private MouseState lastMouseState;
 
     private WaveSpawner waveSpawner = new WaveSpawner();
-
     private Field field;
 
     private ObservingList<Demon> demons = new ObservingList<Demon>();
@@ -48,8 +49,9 @@ public class GameScreen extends Screen {
     private List<Turret> turrets = new ArrayList<Turret>();
     private TurretBar turretBar;
     private Button startWaveButton;
-
     private Turret selectedTurret;
+
+    private ObservingList<VisualEffect> effects = new ObservingList<VisualEffect>();
 
     public GameScreen() {
         this.font = Locator.getAssetContainer().getAssetManager().get(AssetContainer.FONT_ARIAL, BitmapFont.class);
@@ -87,7 +89,7 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(2500, 1000.0f, new FindTargetBehavior());
+        Demon demon = new Demon(2500, 100.0f, new FindTargetBehavior());
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
         wave1.addSpawnee(demon, 5);
@@ -108,11 +110,11 @@ public class GameScreen extends Screen {
     }
 
     private void spawnDemon(Demon demon) {
+        this.setDefenseState();
         this.demons.add(demon);
         demon.setPosition(this.field.getSlotCoordinates(this.field.getStartSlot()));
     }
     private void startWave() {
-        this.setDefenseState();
         this.waveSpawner.startSpawning();
     }
     private void stopWave() {
@@ -149,7 +151,7 @@ public class GameScreen extends Screen {
 
     }
     public void notifyDemonFinished(Demon demon) {
-
+        this.effects.add(new ShakeScreenEffect());
     }
 
     private void checkWaveEnd() {
@@ -167,6 +169,10 @@ public class GameScreen extends Screen {
         this.startWaveButton.render(batch, camera);
         this.field.render(batch, camera);
 
+        for (VisualEffect effect : this.effects) {
+            effect.render(batch, camera);
+        }
+
         for (Turret turret : this.turrets) {
             turret.render(batch, camera);
         }
@@ -179,7 +185,7 @@ public class GameScreen extends Screen {
             this.selectedTurret.render(batch, camera);
         }
 
-        font.draw(batch, this.buildState.isBuilding() ? "building" : "defending", 0, camera.viewportHeight - 50);
+        this.font.draw(batch, this.buildState.isBuilding() ? "building" : "defending", 0, camera.viewportHeight - 50);
     }
 
     @Override
@@ -198,9 +204,14 @@ public class GameScreen extends Screen {
     @Override
     public void update(float delta) {
         this.demons.deleteFlaggedObjects();
+        this.effects.deleteFlaggedObjects();
         this.checkWaveEnd();
 
         this.waveSpawner.update(delta);
+
+        for (VisualEffect effect : this.effects) {
+            effect.update(delta);
+        }
 
         for (Demon demon : this.demons) {
             demon.update(this, delta);

@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.model.effect.Effect;
 import cz.kobzol.turret.model.screen.GameScreen;
-import cz.kobzol.turret.util.Observable;
+import cz.kobzol.turret.util.IObservable;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Attacking demon.
  */
-public class Demon extends SpriteObject implements Observable {
+public class Demon extends SpriteObject implements IObservable {
     private List<ObservableListener> listeners = new ArrayList<ObservableListener>();
 
     protected float max_health;
