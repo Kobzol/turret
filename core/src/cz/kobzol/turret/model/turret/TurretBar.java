@@ -98,10 +98,10 @@ public class TurretBar extends SpriteObject {
             spawner.render(batch, camera, this.goldManager.hasEnoughGoldFor(spawner.getTurret()));
         }
 
-        String value = this.goldManager.getAmount() + "";
+        String value = "Gold: " + this.goldManager.getAmount();
         BitmapFont.TextBounds bounds = this.font.getBounds(value);
 
-        this.font.draw(batch, value, this.getPosition().x + (this.getDimension().width / 2) - bounds.width - 10, this.getPosition().y + bounds.height + 10);
+        this.font.draw(batch, value, this.getPosition().x + (this.getDimension().width / 2) - bounds.width - 10, this.getPosition().y + (bounds.height / 2));
     }
 
     public void handleInput(Clicker clicker, MouseState mouseState) {
