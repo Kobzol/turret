@@ -11,9 +11,10 @@ public class Wave {
     private final List<Integer> counts = new ArrayList<Integer>();
 
     private int objectIndex = 0;
+    private final long spawnCooldown;
 
-    public Wave() {
-
+    public Wave(long spawnCooldown) {
+        this.spawnCooldown = spawnCooldown;
     }
 
     public void addSpawnee(GameObject spawnee, int count) {
@@ -38,5 +39,9 @@ public class Wave {
         }
 
         return object;
+    }
+
+    public long getSpawnCooldown() {
+        return this.spawnCooldown;
     }
 }

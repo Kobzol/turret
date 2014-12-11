@@ -31,6 +31,10 @@ public class WaveSpawner implements IUpdatable {
             return;
         }
 
+        if (this.waveIndex == 0) {
+            this.cooldown.setDuration(this.waves.get(this.waveIndex).getSpawnCooldown());
+        }
+
         this.cooldown.update(delta);
 
         if (this.cooldown.resetIfReady()) {
@@ -44,8 +48,16 @@ public class WaveSpawner implements IUpdatable {
             if (!spawning) {
                 this.notifyWaveEnded();
                 this.waveIndex++;
+
+                if (this.hasWaves()) {
+                    this.cooldown.setDuration(this.waves.get(waveIndex).getSpawnCooldown());
+                }
             }
         }
+    }
+
+    public boolean hasWaves() {
+        return this.waveIndex < this.waves.size();
     }
 
     public void startSpawning() {

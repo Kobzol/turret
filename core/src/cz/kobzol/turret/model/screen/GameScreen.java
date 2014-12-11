@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.input.click.Clicker;
@@ -16,7 +16,7 @@ import cz.kobzol.turret.model.GameObject;
 import cz.kobzol.turret.model.Wave;
 import cz.kobzol.turret.model.WaveSpawner;
 import cz.kobzol.turret.model.demon.Demon;
-import cz.kobzol.turret.model.demon.FindTargetBehavior;
+import cz.kobzol.turret.model.demon.DemonFactory;
 import cz.kobzol.turret.model.field.Field;
 import cz.kobzol.turret.model.field.MazeFieldFactory;
 import cz.kobzol.turret.model.gold.GoldManager;
@@ -57,7 +57,7 @@ public class GameScreen extends Screen {
     private ObservingList<VisualEffect> effects = new ObservingList<VisualEffect>();
 
     public GameScreen(Dimension screenDimension) {
-        this.font = Locator.getAssetContainer().getAssetManager().get(AssetContainer.FONT_ARIAL, BitmapFont.class);
+        this.font = new BitmapFont(Locator.getAssetContainer().getAssetManager().get(AssetContainer.FONT_ARIAL, BitmapFont.class).getData(), (TextureRegion) null, true);
         this.font.setColor(Color.BLACK);
         this.screenDimension = screenDimension;
 
@@ -92,14 +92,25 @@ public class GameScreen extends Screen {
         this.startWaveButton.setPosition(this.turretBar.getPosition());
     }
     private void prepareWaves() {
-        Wave wave1 = new Wave();
-        Demon demon = new Demon(250, 100.0f, new FindTargetBehavior());
-        demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
-        demon.setDimension(new Dimension(30, 30));
-        demon.setGoldValue(50);
-        wave1.addSpawnee(demon, 2);
+        DemonFactory demonFactory = new DemonFactory();
+        Demon basicDemon = demonFactory.createBasicDemon();
+        Demon tankDemon = demonFactory.createTankDemon();
+        Demon quickDemon = demonFactory.createQuickDemon();
 
+        Wave wave1 = new Wave(1000);
+        wave1.addSpawnee(basicDemon, 2);
+        wave1.addSpawnee(tankDemon, 2);
+        wave1.addSpawnee(basicDemon, 5);
         this.waveSpawner.addWave(wave1);
+
+        Wave wave2 = new Wave(500);
+        wave2.addSpawnee(quickDemon, 10);
+        this.waveSpawner.addWave(wave2);
+
+        Wave wave3 = new Wave(400);
+        wave3.addSpawnee(basicDemon, 8);
+        wave3.addSpawnee(quickDemon, 4);
+        this.waveSpawner.addWave(wave3);
 
         this.waveSpawner.addListener(new WaveSpawner.SpawnListener() {
             @Override
