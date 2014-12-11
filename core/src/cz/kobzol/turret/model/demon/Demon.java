@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.model.effect.Effect;
+import cz.kobzol.turret.model.gold.IValuable;
 import cz.kobzol.turret.model.screen.GameScreen;
 import cz.kobzol.turret.util.IObservable;
 
@@ -18,11 +19,13 @@ import java.util.List;
 /**
  * Attacking demon.
  */
-public class Demon extends SpriteObject implements IObservable {
+public class Demon extends SpriteObject implements IObservable, IValuable {
     private List<ObservableListener> listeners = new ArrayList<ObservableListener>();
 
     protected float max_health;
     protected float health;
+
+    private int goldValue;
 
     private DemonBehavior demonBehavior;
 
@@ -33,6 +36,16 @@ public class Demon extends SpriteObject implements IObservable {
         this.setSpeed(speed);
 
         this.demonBehavior = demonBehavior;
+    }
+
+    @Override
+    public int getGoldValue() {
+        return this.goldValue;
+    }
+
+    @Override
+    public void setGoldValue(int value) {
+        this.goldValue = value;
     }
 
     @Override

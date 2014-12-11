@@ -92,6 +92,7 @@ public class GameScreen extends Screen {
         Demon demon = new Demon(2500, 1000.0f, new FindTargetBehavior());
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
+        demon.setGoldValue(50);
         wave1.addSpawnee(demon, 2);
 
         this.waveSpawner.addWave(wave1);

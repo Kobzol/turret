@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.model.demon.Demon;
+import cz.kobzol.turret.model.gold.IValuable;
 import cz.kobzol.turret.model.screen.GameScreen;
 import cz.kobzol.turret.services.Locator;
 
@@ -15,7 +16,9 @@ import java.util.List;
 /**
  * Represents a turret.
  */
-public class Turret extends SpriteObject {
+public class Turret extends SpriteObject implements IValuable {
+    private int goldValue;
+
     protected TurretCanon canon;
 
     public Turret(TurretCanon canon) {
@@ -40,6 +43,16 @@ public class Turret extends SpriteObject {
     }
     public TurretCanon getCanon() {
         return this.canon;
+    }
+
+    @Override
+    public int getGoldValue() {
+        return this.goldValue;
+    }
+
+    @Override
+    public void setGoldValue(int value) {
+        this.goldValue = value;
     }
 
     @Override

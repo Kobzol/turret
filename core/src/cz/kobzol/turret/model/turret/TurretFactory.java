@@ -31,6 +31,7 @@ public class TurretFactory {
         Turret turret = new Turret(canon);
         turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET1_IMG));
         turret.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
+        turret.setGoldValue(100);
 
         return turret;
     }
@@ -51,6 +52,7 @@ public class TurretFactory {
         Turret turret = new Turret(canon);
         turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET2_IMG));
         turret.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
+        turret.setGoldValue(200);
 
         return turret;
     }
@@ -71,6 +73,7 @@ public class TurretFactory {
         Turret turret = new Turret(canon);
         turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET3_IMG));
         turret.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
+        turret.setGoldValue(200);
 
         return turret;
     }
@@ -84,6 +87,7 @@ public class TurretFactory {
         Turret turret = new Turret(canon);
         turret.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET4_IMG));
         turret.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
+        turret.setGoldValue(500);
 
         return turret;
     }
