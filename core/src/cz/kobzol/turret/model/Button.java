@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import cz.kobzol.turret.graphics.SpriteObject;
 import cz.kobzol.turret.input.click.ClickContainer;
 import cz.kobzol.turret.input.click.IClickable;
@@ -24,13 +24,13 @@ public class Button extends SpriteObject implements IClickable {
     private final OnClickListener listener;
     private String text;
 
-    public Button(String text, OnClickListener listener) {
+    public Button(String text, Color color, OnClickListener listener) {
         this.clickContainer = new ClickContainer(this);
 
         this.text = text;
 
-        this.font = Locator.getAssetContainer().getAssetManager().get(AssetContainer.FONT_ARIAL, BitmapFont.class);
-        this.font.setColor(Color.BLACK);
+        this.font = new BitmapFont(Locator.getAssetContainer().getAssetManager().get(AssetContainer.FONT_ARIAL, BitmapFont.class).getData(), (TextureRegion) null, true);
+        this.font.setColor(color);
         BitmapFont.TextBounds bounds =  this.font.getBounds(text);
         this.setDimension(new Dimension((int) bounds.width, (int) bounds.height));
 
@@ -40,13 +40,6 @@ public class Button extends SpriteObject implements IClickable {
     @Override
     public void render(Batch batch, Camera camera) {
         this.font.draw(batch, this.text, this.getPosition().x - this.getDimension().width / 2, this.getPosition().y + this.getDimension().height / 2);
-    }
-
-    @Override
-    public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
-        shapeRenderer.set(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(this.getPosition().x - this.getDimension().width / 2, this.getPosition().y - this.getDimension().height / 2, this.getDimension().width, this.getDimension().height);
     }
 
     @Override

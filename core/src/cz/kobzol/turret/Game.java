@@ -19,17 +19,20 @@ import cz.kobzol.turret.util.AssetContainer;
 import cz.kobzol.turret.util.ObjectLoader;
 import cz.kobzol.turret.util.ObjectManager;
 
+import java.awt.Dimension;
+
 /**
  * Represents the game.
  */
 public final class Game {
-    SpriteBatch batch;
-    ShapeRenderer shapeRenderer;
-    OrthographicCamera camera;
+    private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
+    private OrthographicCamera camera;
 
-    AssetContainer assetContainer;
+    private AssetContainer assetContainer;
 
-    Screen screen;
+    private Dimension screenDimension = new Dimension(1530, 790);
+    private Screen screen;
 
     public Game() {
         this.assetContainer = this.createAssets();
@@ -80,7 +83,7 @@ public final class Game {
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
         this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 1560, 800);
+        this.camera.setToOrtho(false, this.screenDimension.width, this.screenDimension.height);
     }
 
     public Screen getActiveScreen() {
@@ -125,7 +128,7 @@ public final class Game {
     }
 
     public void start() {
-        this.screen = new GameScreen();
+        this.screen = new GameScreen(this.screenDimension);
     }
 
     public void dispose() {

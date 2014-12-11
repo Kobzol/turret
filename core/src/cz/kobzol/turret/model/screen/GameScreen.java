@@ -39,6 +39,7 @@ public class GameScreen extends Screen {
     private BuildState buildState = new BuildState();
     private BitmapFont font;
     private Clicker clicker = new Clicker();
+    private final Dimension screenDimension;
 
     private MouseState lastMouseState;
 
@@ -55,18 +56,16 @@ public class GameScreen extends Screen {
 
     private ObservingList<VisualEffect> effects = new ObservingList<VisualEffect>();
 
-    public GameScreen() {
+    public GameScreen(Dimension screenDimension) {
         this.font = Locator.getAssetContainer().getAssetManager().get(AssetContainer.FONT_ARIAL, BitmapFont.class);
         this.font.setColor(Color.BLACK);
+        this.screenDimension = screenDimension;
 
         this.prepareGUI();
         this.prepareWaves();
     }
 
     private void prepareGUI() {
-        this.field = new MazeFieldFactory(new Dimension(20, 10), new Dimension(30, 30), new Vector2(0, 0), new Vector2(19, 9)).createMaze();
-        this.field.setPosition(new Vector2(0, 0));
-
         this.turretBar = new TurretBar(new TurretBar.TurretBarListener() {
             @Override
             public void onTurretSelected(Turret turret) {
@@ -76,10 +75,13 @@ public class GameScreen extends Screen {
             }
         }, this.goldManager);
 
-        this.turretBar.setPosition(new Vector2(250, 650));
-        this.turretBar.setDimension(new Dimension(500, 100));
+        this.turretBar.setDimension(new Dimension(this.screenDimension.width, 100));
+        this.turretBar.setPosition(new Vector2(this.turretBar.getDimension().width / 2, this.screenDimension.height - this.turretBar.getDimension().height / 2));
 
-        this.startWaveButton = new Button("Start wave", new Button.OnClickListener() {
+        this.field = new MazeFieldFactory(new Dimension(26, 12), new Dimension(30, 30), new Vector2(0, 0), new Vector2(19, 9)).createMaze();
+        this.field.setPosition(new Vector2(0, 0));
+
+        this.startWaveButton = new Button("Start wave", Color.GREEN.cpy(), new Button.OnClickListener() {
             @Override
             public void onClick() {
                 if (buildState.isBuilding()) {
@@ -87,7 +89,7 @@ public class GameScreen extends Screen {
                 }
             }
         });
-        this.startWaveButton.setPosition(new Vector2(1000, 650));
+        this.startWaveButton.setPosition(this.turretBar.getPosition());
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
@@ -189,8 +191,6 @@ public class GameScreen extends Screen {
         if (this.selectedTurret != null) {
             this.selectedTurret.render(batch, camera);
         }
-
-        this.font.draw(batch, this.buildState.isBuilding() ? "building" : "defending", 0, camera.viewportHeight - 50);
     }
 
     @Override
