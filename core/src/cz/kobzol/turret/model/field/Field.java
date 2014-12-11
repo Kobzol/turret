@@ -28,8 +28,9 @@ public class Field extends SpriteObject implements IClickable {
     private final Vector2 startIndex;
     private final Vector2 endIndex;
 
-    private Texture slotTexture;
-    private Texture platformTexture;
+    private final Texture slotTexture;
+    private final Texture platformTexture;
+    private final Texture targetTexture;
 
     private FieldSlot[][] slots;
 
@@ -49,6 +50,7 @@ public class Field extends SpriteObject implements IClickable {
 
         this.slotTexture = Locator.getAssetContainer().getAssetManager().get(AssetContainer.GRASS_IMG);
         this.platformTexture = Locator.getAssetContainer().getAssetManager().get(AssetContainer.PLATFORM_IMG);
+        this.targetTexture = Locator.getAssetContainer().getAssetManager().get(AssetContainer.TARGET_IMG);
 
         this.setDimension(new Dimension(this.fieldDimension.width * this.slotDimension.width, this.fieldDimension.height * this.slotDimension.height));
 
@@ -190,11 +192,13 @@ public class Field extends SpriteObject implements IClickable {
                 double xPos = anchorPoint.x + x * slotDimension.getWidth();
                 double yPos = anchorPoint.y + y * slotDimension.getHeight();
 
-                batch.draw(this.slotTexture, (float) xPos, (float) yPos);
-
-                if (this.slots[y][x].isPlatform()) {
+                if (this.slots[y][x] == this.getEndSlot() || this.slots[y][x] == this.getStartSlot()) {
+                    batch.draw(this.targetTexture, (float) xPos, (float) yPos);
+                }
+                else if (this.slots[y][x].isPlatform()) {
                     batch.draw(this.platformTexture, (float) xPos, (float) yPos);
                 }
+                else batch.draw(this.slotTexture, (float) xPos, (float) yPos);
             }
         }
     }

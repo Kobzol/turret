@@ -78,7 +78,7 @@ public class GameScreen extends Screen {
         this.turretBar.setDimension(new Dimension(this.screenDimension.width, 100));
         this.turretBar.setPosition(new Vector2(this.turretBar.getDimension().width / 2, this.screenDimension.height - this.turretBar.getDimension().height / 2));
 
-        this.field = new MazeFieldFactory(new Dimension(26, 12), new Dimension(30, 30), new Vector2(0, 0), new Vector2(19, 9)).createMaze();
+        this.field = new MazeFieldFactory(new Dimension(26, 12), new Dimension(30, 30), new Vector2(0, 0), new Vector2(25, 11)).createMaze();
         this.field.setPosition(new Vector2(0, 0));
 
         this.startWaveButton = new Button("Start wave", Color.GREEN.cpy(), new Button.OnClickListener() {
