@@ -19,6 +19,7 @@ import cz.kobzol.turret.model.demon.Demon;
 import cz.kobzol.turret.model.demon.FindTargetBehavior;
 import cz.kobzol.turret.model.field.Field;
 import cz.kobzol.turret.model.field.MazeFieldFactory;
+import cz.kobzol.turret.model.gold.GoldManager;
 import cz.kobzol.turret.model.turret.Turret;
 import cz.kobzol.turret.model.turret.TurretBar;
 import cz.kobzol.turret.model.visual.ShakeScreenEffect;
@@ -50,6 +51,7 @@ public class GameScreen extends Screen {
     private TurretBar turretBar;
     private Button startWaveButton;
     private Turret selectedTurret;
+    private GoldManager goldManager = new GoldManager(500);
 
     private ObservingList<VisualEffect> effects = new ObservingList<VisualEffect>();
 
@@ -72,7 +74,7 @@ public class GameScreen extends Screen {
                     selectedTurret = (Turret) turret.clone();
                 }
             }
-        });
+        }, this.goldManager);
 
         this.turretBar.setPosition(new Vector2(250, 650));
         this.turretBar.setDimension(new Dimension(500, 100));
@@ -89,7 +91,7 @@ public class GameScreen extends Screen {
     }
     private void prepareWaves() {
         Wave wave1 = new Wave();
-        Demon demon = new Demon(2500, 1000.0f, new FindTargetBehavior());
+        Demon demon = new Demon(250, 100.0f, new FindTargetBehavior());
         demon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.DEMON1_IMG));
         demon.setDimension(new Dimension(30, 30));
         demon.setGoldValue(50);
@@ -146,10 +148,11 @@ public class GameScreen extends Screen {
         this.selectedTurret = null;
         this.turrets.add(turret);
         this.field.registerObject(turret);
+        this.goldManager.withdraw(turret);
     }
 
     public void notifyDemonDied(Demon demon) {
-
+        this.goldManager.deposit(demon);
     }
     public void notifyDemonFinished(Demon demon) {
         this.effects.add(new ShakeScreenEffect());

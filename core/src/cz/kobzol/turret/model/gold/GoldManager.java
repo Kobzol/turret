@@ -28,6 +28,9 @@ public class GoldManager implements IDrawable {
     public boolean hasEnoughGoldFor(IValuable valuable) {
         return valuable.getGoldValue() <= this.goldAmount;
     }
+    public int getAmount() {
+        return this.goldAmount;
+    }
 
     @Override
     public void render(Batch batch, Camera camera) {
