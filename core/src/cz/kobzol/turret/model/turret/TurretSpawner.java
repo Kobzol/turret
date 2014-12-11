@@ -1,6 +1,7 @@
 package cz.kobzol.turret.model.turret;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
@@ -31,6 +32,18 @@ public class TurretSpawner extends SpriteObject implements IClickable {
     @Override
     public ClickContainer getClickContainer() {
         return this.clickContainer;
+    }
+
+    public void render(Batch batch, Camera camera, boolean canBeBought) {
+        if (!canBeBought) {
+            Color turretColor = this.spawnedTurret.getColor();
+            this.spawnedTurret.setColor(new Color(turretColor).mul(0.5f));
+
+            this.render(batch, camera);
+
+            this.spawnedTurret.setColor(turretColor);
+        }
+        else this.render(batch, camera);
     }
 
     @Override

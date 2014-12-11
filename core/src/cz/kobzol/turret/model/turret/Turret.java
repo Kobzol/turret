@@ -75,6 +75,12 @@ public class Turret extends SpriteObject implements IValuable {
     }
 
     @Override
+    public void setColor(Color color) {
+        super.setColor(color);
+        this.canon.setColor(color);
+    }
+
+    @Override
     public void setPosition(Vector2 position) {
         super.setPosition(position);
         this.updateCanonPosition();

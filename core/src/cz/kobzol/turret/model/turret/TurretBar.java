@@ -36,7 +36,6 @@ public class TurretBar extends SpriteObject {
         this.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET_BAR_IMG));
 
         this.prepareTurretSpawners();
-
         this.repositionSpawners();
     }
 
@@ -96,7 +95,7 @@ public class TurretBar extends SpriteObject {
         super.render(batch, camera);
 
         for (TurretSpawner spawner : this.spawners) {
-            spawner.render(batch, camera);
+            spawner.render(batch, camera, this.goldManager.hasEnoughGoldFor(spawner.getTurret()));
         }
 
         String value = this.goldManager.getAmount() + "";
