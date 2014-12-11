@@ -8,4 +8,5 @@ import cz.kobzol.turret.graphics.IPositionable;
  */
 public interface IDraggable extends IPositionable, ICollidable {
     DragContainer getDragContainer();
+    boolean isDraggable();
 }

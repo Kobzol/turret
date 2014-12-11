@@ -1,12 +1,12 @@
-package cz.kobzol.turret.map;
+package cz.kobzol.turret.util;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.DrawableShape;
-import cz.kobzol.turret.model.GameObject;
 import cz.kobzol.turret.graphics.SpriteObject;
+import cz.kobzol.turret.model.GameObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,30 +22,30 @@ import java.lang.reflect.Constructor;
 /**
  * Loads maps and objects from XML files.
  */
-public class MapLoader {
+public class ObjectLoader {
     private static String CLASS_NAMESPACE = "cz.kobzol.turret";
 
     private AssetManager assetManager;
 
-    public MapLoader(AssetManager assetManager) {
+    public ObjectLoader(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
-    public Level parseLevel(FileHandle levelXML) {
-        return this.parseLevel(levelXML.read());
+    public ObjectManager parseObjectManager(FileHandle levelXML) {
+        return this.parseObjectManager(levelXML.read());
     }
 
-    public Level parseLevel(String levelXML) {
-        return this.parseLevel(new ByteArrayInputStream(levelXML.getBytes()));
+    public ObjectManager parseObjectManager(String levelXML) {
+        return this.parseObjectManager(new ByteArrayInputStream(levelXML.getBytes()));
     }
 
     /**
      * Parses level from the given XML.
      * @param inputXML inputstream with XML
-     * @return parsed Level or null in case of failure
+     * @return parsed ObjectManager or null in case of failure
      */
-    public Level parseLevel(InputStream inputXML) {
-        Level level = new Level();
+    public ObjectManager parseObjectManager(InputStream inputXML) {
+        ObjectManager level = new ObjectManager();
         Document dom = this.createDOM(inputXML);
 
         NodeList nodes = dom.getDocumentElement().getChildNodes();
@@ -70,7 +70,7 @@ public class MapLoader {
      * @param level level
      * @param elementObjects DOM element
      */
-    private void parseObjects(Level level, Element elementObjects) {
+    private void parseObjects(ObjectManager level, Element elementObjects) {
         for (int i = 0; i < elementObjects.getChildNodes().getLength(); i++) {
             Node node = elementObjects.getChildNodes().item(i);
 
@@ -90,7 +90,7 @@ public class MapLoader {
                         }
                     }
 
-                    level.addObject(object);
+                    level.registerObject(object);
                 }
             }
         }
@@ -103,7 +103,7 @@ public class MapLoader {
      */
     private Object createObject(Element elementObject) {
         try {
-            Class<?> objectClass = Class.forName(MapLoader.CLASS_NAMESPACE + "." + elementObject.getAttribute("class"));
+            Class<?> objectClass = Class.forName(ObjectLoader.CLASS_NAMESPACE + "." + elementObject.getAttribute("class"));
             Constructor<?> objectConstructor = objectClass.getConstructor();
             return objectConstructor.newInstance();
         }
@@ -122,13 +122,9 @@ public class MapLoader {
     private void parseShape(Object object, Element elementObject) {
         DrawableShape shape = (DrawableShape) object;
 
-        Dimension dimension = this.parseDimension(elementObject);
         Vector2 position = this.parsePosition(elementObject);
         Texture texture = this.parseTexture(elementObject);
-
-        if (dimension != null) {
-            shape.setDimension(dimension);
-        }
+        Dimension dimension = this.parseDimension(elementObject);
 
         if (position != null) {
             shape.setPosition(position);
@@ -136,6 +132,10 @@ public class MapLoader {
 
         if (texture != null) {
             shape.setTexture(texture);
+        }
+
+        if (dimension != null) {
+            shape.setDimension(dimension);
         }
     }
 

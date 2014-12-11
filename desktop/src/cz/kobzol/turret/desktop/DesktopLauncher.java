@@ -12,6 +12,7 @@ public class DesktopLauncher {
         config.backgroundFPS = 60;
         config.width = 1200;
         config.height = 600;
+        config.title = "Turrets";
 
 		new LwjglApplication(new GameLoop(), config);
 	}

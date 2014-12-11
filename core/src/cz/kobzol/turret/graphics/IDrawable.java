@@ -1,5 +1,6 @@
 package cz.kobzol.turret.graphics;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -10,8 +11,9 @@ public interface IDrawable {
     /**
      * Draw itself on a given batch.
      * @param batch batch
+     * @param camera camera
      */
-    void draw(Batch batch);
+    void render(Batch batch, Camera camera);
 
-    void drawShape(ShapeRenderer shapeRenderer);
+    void renderShape(ShapeRenderer shapeRenderer, Camera camera);
 }

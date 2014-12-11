@@ -1,17 +1,13 @@
 package cz.kobzol.turret.graphics;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import cz.kobzol.turret.graphics.DrawableShape;
-import cz.kobzol.turret.graphics.ICollidable;
-import cz.kobzol.turret.graphics.IMovable;
-import cz.kobzol.turret.graphics.IRotable;
-import cz.kobzol.turret.graphics.IUpdatable;
-import cz.kobzol.turret.model.GameObject;
 
 import java.awt.Dimension;
 
@@ -21,11 +17,15 @@ import java.awt.Dimension;
 public abstract class SpriteObject extends DrawableShape implements IMovable, IRotable, ICollidable, IUpdatable {
     protected Sprite sprite;
     protected Vector2 direction;
+    protected Vector2 moveDirection;
     protected float speed;
+    protected Color color;
 
     public SpriteObject() {
         this.sprite = new Sprite();
-        this.direction = new Vector2(0, -1);
+        this.color = new Color(Color.WHITE);
+        this.direction = new Vector2(0, 1);
+        this.moveDirection = this.direction.cpy();
     }
 
     public float getSpeed() {
@@ -59,23 +59,37 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     }
 
     @Override
-    public void draw(Batch batch) {
-            batch.draw(
-                    this.sprite, this.sprite.getX() - this.sprite.getOriginX(), this.sprite.getY()  - this.sprite.getOriginY(),
-                    this.sprite.getOriginX(), this.sprite.getOriginY(),
-                    this.sprite.getWidth(), this.sprite.getHeight(),
-                    this.sprite.getScaleX(), this.sprite.getScaleY(), this.sprite.getRotation());
+    public void render(Batch batch, Camera camera) {
+        Color color = batch.getColor();
+
+        batch.setColor(this.color);
+
+        batch.draw(
+                this.sprite, this.sprite.getX() - this.sprite.getWidth() / 2, this.sprite.getY() - this.sprite.getHeight() / 2,
+                this.sprite.getOriginX(), this.sprite.getOriginY(),
+                this.sprite.getWidth(), this.sprite.getHeight(),
+                this.sprite.getScaleX(), this.sprite.getScaleY(), this.sprite.getRotation());
+
+        batch.setColor(color);
     }
 
-    public void drawShape(ShapeRenderer shapeRenderer) {
-        shapeRenderer.rect(this.getBoundingBox().x, this.getBoundingBox().y, this.getBoundingBox().width, this.getBoundingBox().height);
+    public void setColor(Color color) {
+        this.color.set(color);
+    }
+    public Color getColor() {
+        return new Color(this.color);
     }
 
     @Override
-    public void move() {
-        float speed = this.speed;
+    public void renderShape(ShapeRenderer shapeRenderer, Camera camera) {
+        //shapeRenderer.rect(this.getBoundingBox().x, this.getBoundingBox().y, this.getBoundingBox().width, this.getBoundingBox().height);
+    }
 
-        Vector2 move_vector = new Vector2(this.direction);
+    @Override
+    public void move(float delta) {
+        float speed = this.getSpeed() * delta;
+
+        Vector2 move_vector = this.getMoveDirection();
 
         this.setPosition(this.getPosition().add(move_vector.scl(speed)));
     }
@@ -108,6 +122,16 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     }
 
     @Override
+    public Vector2 getMoveDirection() {
+        return this.moveDirection.cpy();
+    }
+
+    @Override
+    public void setMoveDirection(Vector2 moveDirection) {
+        this.moveDirection.set(moveDirection);
+    }
+
+    @Override
     public boolean collidesWith(ICollidable collidable) {
         return this.getBoundingBox().overlaps(collidable.getBoundingBox());
     }
@@ -121,8 +145,12 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
         return rect;
     }
 
+    public void setOrigin(int x, int y) {
+        this.sprite.setOrigin(x, y);
+    }
+
     @Override
-    public void update() {
+    public void update(float delta) {
 
     }
 
@@ -130,10 +158,24 @@ public abstract class SpriteObject extends DrawableShape implements IMovable, IR
     public Object clone() {
         SpriteObject obj = (SpriteObject) super.clone();
         obj.sprite = new Sprite();
-        obj.setTexture(new Texture(this.getTexture().getTextureData()));
-        obj.position = new Vector2(this.getPosition());
-        obj.direction = new Vector2(this.getDirection());
-        obj.dimension = (Dimension) this.getDimension().clone();
+
+        Vector2 origin = new Vector2(this.sprite.getOriginX(), this.sprite.getOriginY());
+        Dimension originalDimension = this.getDimension();
+
+        if (this.texture != null) {
+            obj.setTexture(new Texture(this.getTexture().getTextureData()));
+        }
+
+        obj.position = this.getPosition().cpy();
+        obj.direction = this.getDirection().cpy();
+        obj.moveDirection = this.moveDirection.cpy();
+        obj.dimension = originalDimension;
+        obj.setDimension(obj.dimension);
+
+        this.setDimension(originalDimension);
+
+        obj.setOrigin((int) origin.x, (int) origin.y);
+        obj.color = this.getColor();
 
         return obj;
     }
