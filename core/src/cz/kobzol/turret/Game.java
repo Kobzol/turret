@@ -55,6 +55,7 @@ public final class Game {
         assetManager.load(AssetContainer.GRASS_IMG, Texture.class);
         assetManager.load(AssetContainer.PLATFORM_IMG, Texture.class);
         assetManager.load(AssetContainer.TARGET_IMG, Texture.class);
+        assetManager.load(AssetContainer.COIN_IMG, Texture.class);
         assetManager.load(AssetContainer.TURRET_BAR_IMG, Texture.class);
 
         assetManager.load(AssetContainer.TURRET1_IMG, Texture.class);

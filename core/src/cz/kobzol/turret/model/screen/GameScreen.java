@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.input.click.Clicker;
 import cz.kobzol.turret.input.mouse.MouseState;
 import cz.kobzol.turret.model.Button;
+import cz.kobzol.turret.model.Coin;
 import cz.kobzol.turret.model.GameObject;
 import cz.kobzol.turret.model.Wave;
 import cz.kobzol.turret.model.WaveSpawner;
@@ -20,6 +22,7 @@ import cz.kobzol.turret.model.demon.DemonFactory;
 import cz.kobzol.turret.model.field.Field;
 import cz.kobzol.turret.model.field.MazeFieldFactory;
 import cz.kobzol.turret.model.gold.GoldManager;
+import cz.kobzol.turret.model.gold.IValuable;
 import cz.kobzol.turret.model.turret.Turret;
 import cz.kobzol.turret.model.turret.TurretBar;
 import cz.kobzol.turret.model.visual.ShakeScreenEffect;
@@ -47,6 +50,7 @@ public class GameScreen extends Screen {
     private Field field;
 
     private ObservingList<Demon> demons = new ObservingList<Demon>();
+    private ObservingList<Coin> coins = new ObservingList<Coin>();
 
     private List<Turret> turrets = new ArrayList<Turret>();
     private TurretBar turretBar;
@@ -165,10 +169,17 @@ public class GameScreen extends Screen {
     }
 
     public void notifyDemonDied(Demon demon) {
-        this.goldManager.deposit(demon);
+        Coin coin = new Coin(this, demon.getGoldValue());
+        coin.setPosition(demon.getPosition());
+        coin.setTexture(Locator.getAssetContainer().getAssetManager().get(AssetContainer.COIN_IMG, Texture.class));
+        this.coins.add(coin);
     }
     public void notifyDemonFinished(Demon demon) {
         this.effects.add(new ShakeScreenEffect());
+    }
+
+    public void deposit(IValuable valuable) {
+        this.goldManager.deposit(valuable);
     }
 
     private void checkWaveEnd() {
@@ -199,6 +210,10 @@ public class GameScreen extends Screen {
             demon.render(batch, camera);
         }
 
+        for (Coin coin : this.coins) {
+            coin.render(batch, camera);
+        }
+
         if (this.selectedTurret != null) {
             this.selectedTurret.render(batch, camera);
         }
@@ -221,6 +236,7 @@ public class GameScreen extends Screen {
     public void update(float delta) {
         this.demons.deleteFlaggedObjects();
         this.effects.deleteFlaggedObjects();
+        this.coins.deleteFlaggedObjects();
         this.checkWaveEnd();
 
         this.waveSpawner.update(delta);
@@ -237,6 +253,10 @@ public class GameScreen extends Screen {
         for (Turret turret : this.turrets) {
             turret.update(this, delta);
         }
+
+        for (Coin coin : this.coins) {
+            coin.update(delta);
+        }
     }
 
     @Override
@@ -246,6 +266,10 @@ public class GameScreen extends Screen {
         this.clicker.handleClick(this.startWaveButton, mouseState);
         this.clicker.handleClick(this.field, mouseState);
         this.turretBar.handleInput(this.clicker, mouseState);
+
+        for (Coin coin : this.coins) {
+            this.clicker.handleClick(coin, mouseState);
+        }
 
         if (this.selectedTurret != null) {
             this.selectedTurret.setPosition(mouseState.getMousePosition());

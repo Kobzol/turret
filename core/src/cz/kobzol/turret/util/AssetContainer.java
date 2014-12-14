@@ -14,6 +14,7 @@ public class AssetContainer {
     public static final String GRASS_IMG = "img/grass.png";
     public static final String PLATFORM_IMG = "img/platform.png";
     public static final String TARGET_IMG = "img/target.png";
+    public static final String COIN_IMG = "img/coin.png";
     public static final String TURRET_BAR_IMG = "img/wood.jpg";
 
     public static final String TURRET1_IMG = "img/turrets/turret1_body.png";
