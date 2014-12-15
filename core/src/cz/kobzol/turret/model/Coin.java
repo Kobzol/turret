@@ -10,6 +10,7 @@ import cz.kobzol.turret.util.Cooldown;
 import cz.kobzol.turret.util.IObservable;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -18,7 +19,8 @@ import java.util.List;
 public class Coin extends SpriteObject implements IValuable, IObservable, IClickable {
     private enum CoinState {
         RISING,
-        ROTATING
+        ROTATING,
+        DISAPPEARING
     }
 
     private final ClickContainer clickContainer;
@@ -28,8 +30,9 @@ public class Coin extends SpriteObject implements IValuable, IObservable, IClick
     private int value;
     private int direction = 1;
     private final float baseScale;
-    private CoinState state;
+    private EnumSet<CoinState> state;
     private Cooldown riseCooldown = new Cooldown(500);
+    private Cooldown disappearCooldown = new Cooldown(5000);
 
     public Coin(GameScreen gameScreen, int value) {
         this.clickContainer = new ClickContainer(this);
@@ -41,7 +44,7 @@ public class Coin extends SpriteObject implements IValuable, IObservable, IClick
 
         this.setSpeed(100.0f);
 
-        this.state = CoinState.RISING;
+        this.state = EnumSet.of(CoinState.RISING);
     }
 
     private void notifyRemove() {
@@ -55,20 +58,36 @@ public class Coin extends SpriteObject implements IValuable, IObservable, IClick
         super.update(delta);
 
         this.riseCooldown.update(delta);
+        this.disappearCooldown.update(delta);
 
-        if (this.state.equals(CoinState.RISING)) {
+        if (this.state.contains(CoinState.RISING)) {
             this.move(delta);
 
             if (this.riseCooldown.isReady()) {
-                this.state = CoinState.ROTATING;
+                this.state.remove(CoinState.RISING);
+                this.state.add(CoinState.ROTATING);
+                this.disappearCooldown.reset();
             }
         }
-        else {
+
+        if (this.state.contains(CoinState.ROTATING)){
             if (this.sprite.getScaleX() <= -this.baseScale || this.sprite.getScaleX() >= this.baseScale) {
                 this.direction *= -1;
             }
 
             this.sprite.setScale(this.sprite.getScaleX() + 0.01f * this.direction, this.baseScale);
+
+            if (this.disappearCooldown.isReady()) {
+                this.state.add(CoinState.DISAPPEARING);
+            }
+        }
+
+        if (this.state.contains(CoinState.DISAPPEARING)) {
+            this.setColor(this.getColor().mul(0.95f));
+
+            if (this.getColor().a < 0.1f) {
+                this.notifyRemove();
+            }
         }
     }
 
