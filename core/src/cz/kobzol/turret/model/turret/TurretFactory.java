@@ -79,7 +79,7 @@ public class TurretFactory {
     }
 
     public Turret createLaserTurret() {
-        TurretCanon canon = new LaserTurretCanon(200, 50, 100);
+        TurretCanon canon = new LaserTurretCanon(200, 50, 200);
         canon.setTexture((Texture) Locator.getAssetContainer().getAssetManager().get(AssetContainer.TURRET4_CANON_IMG));
         canon.setDimension(new Dimension(TurretFactory.TURRET_SIZE, TurretFactory.TURRET_SIZE));
         canon.setOrigin(15, 8);

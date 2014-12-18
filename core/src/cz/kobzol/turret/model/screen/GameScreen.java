@@ -56,7 +56,7 @@ public class GameScreen extends Screen {
     private TurretBar turretBar;
     private Button startWaveButton;
     private Turret selectedTurret;
-    private GoldManager goldManager = new GoldManager(500);
+    private GoldManager goldManager = new GoldManager(1000);
 
     private ObservingList<VisualEffect> effects = new ObservingList<VisualEffect>();
 
@@ -156,6 +156,9 @@ public class GameScreen extends Screen {
     }
     public List<Demon> getDemons() {
         return this.demons;
+    }
+    public List<Turret> getTurrets() {
+        return this.turrets;
     }
     public Field getField() {
         return this.field;

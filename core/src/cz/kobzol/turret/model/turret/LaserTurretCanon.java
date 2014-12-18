@@ -54,8 +54,8 @@ public class LaserTurretCanon extends TurretCanon {
     }
 
     @Override
-    public void handleDemons(List<Demon> demons, float delta) {
-        super.handleDemons(demons, delta);
+    public void handleDemons(List<Turret> turrets, List<Demon> demons, float delta) {
+        super.handleDemons(turrets, demons, delta);
 
         if (this.target == null) {
             this.target = this.findTarget(demons);
@@ -65,7 +65,28 @@ public class LaserTurretCanon extends TurretCanon {
             this.hideLaser(this.laser);
         }
 
-        if (this.target != null) {
+        if (this.target == null) {
+            LaserTurretCanon laserMate = null;
+
+            for (Turret turret : turrets) {
+                if (turret.getCanon() instanceof LaserTurretCanon &&
+                    turret.getCanon() != this &&
+                    ((LaserTurretCanon) turret.getCanon()).target != null) {
+                        laserMate = (LaserTurretCanon) turret.getCanon();
+                        break;
+                }
+            }
+
+            if (laserMate != null) {
+                Vector2 middleHalf = laserMate.target.getPosition().sub(laserMate.getPosition()).scl(0.5f);
+                Vector2 middlePosition = laserMate.getPosition().add(middleHalf);
+
+                this.moveLaserTo(middlePosition);
+                this.dealDamage(laserMate.target);
+            }
+            else this.hideLaser(this.laser);
+        }
+        else if (this.target != null) {
             this.shootAt(this.target);
         }
     }
@@ -75,14 +96,30 @@ public class LaserTurretCanon extends TurretCanon {
     }
 
     private void shootAt(Demon demon) {
-        Vector2 targetDir = demon.getPosition().sub(this.getPosition());
-        this.laser.setDimension(new Dimension(10, (int) targetDir.len()));
+        this.moveLaserTo(demon.getPosition());
+        this.dealDamage(demon);
 
-        this.laser.setPosition(this.getPosition().add(targetDir.scl(0.5f)));
-        this.laser.setDirection(targetDir.nor());
+    }
 
+    private void dealDamage(Demon demon) {
         if (this.fire_cooldown.resetIfReady()) {
             demon.receiveDamage(this.damage);
         }
+    }
+
+    private void moveLaserTo(Vector2 position) {
+        Vector2 targetDir = position.sub(this.getPosition());
+
+        this.laser.setDimension(new Dimension(10, (int) targetDir.len()));
+        this.laser.setPosition(this.getPosition().add(targetDir.scl(0.5f)));
+        this.laser.setDirection(targetDir.nor());
+    }
+
+    @Override
+    public Object clone() {
+        LaserTurretCanon canon = (LaserTurretCanon) super.clone();
+        canon.laser = (Laser) this.laser.clone();
+
+        return canon;
     }
 }

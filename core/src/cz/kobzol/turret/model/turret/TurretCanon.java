@@ -23,7 +23,7 @@ public abstract class TurretCanon extends SpriteObject {
         this.fire_cooldown = new Cooldown(fire_delay);
     }
 
-    public void handleDemons(List<Demon> demons, float delta) {
+    public void handleDemons(List<Turret> turrets, List<Demon> demons, float delta) {
         super.update(delta);
 
         this.fire_cooldown.update(delta);

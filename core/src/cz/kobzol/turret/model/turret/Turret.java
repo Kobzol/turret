@@ -6,12 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import cz.kobzol.turret.graphics.SpriteObject;
-import cz.kobzol.turret.model.demon.Demon;
 import cz.kobzol.turret.model.gold.IValuable;
 import cz.kobzol.turret.model.screen.GameScreen;
 import cz.kobzol.turret.services.Locator;
-
-import java.util.List;
 
 /**
  * Represents a turret.
@@ -34,8 +31,7 @@ public class Turret extends SpriteObject implements IValuable {
     public void update(GameScreen gameScreen, float delta) {
         super.update(delta);
 
-        List<Demon> demons = gameScreen.getDemons();
-        this.canon.handleDemons(demons, delta);
+        this.canon.handleDemons(gameScreen.getTurrets(), gameScreen.getDemons(), delta);
     }
 
     public float getRange() {

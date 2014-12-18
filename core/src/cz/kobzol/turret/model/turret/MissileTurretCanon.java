@@ -102,8 +102,8 @@ public class MissileTurretCanon extends TurretCanon {
     }
 
     @Override
-    public void handleDemons(List<Demon> demons, float delta) {
-        super.handleDemons(demons, delta);
+    public void handleDemons(List<Turret> turrets, List<Demon> demons, float delta) {
+        super.handleDemons(turrets, demons, delta);
 
         for (Iterator<Bullet> it = this.bullets.iterator(); it.hasNext();) {
             Bullet bullet = it.next();
